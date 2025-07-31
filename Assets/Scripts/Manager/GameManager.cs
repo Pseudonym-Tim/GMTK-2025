@@ -11,6 +11,7 @@ public class GameManager : Singleton<GameManager>
     public static GameState CurrentGameState { get; set; } = GameState.INACTIVE;
     public static float InGameTimer { get; private set; } = 0.0f;
     private static float previousTimeScale = 0;
+    private static LevelManager levelManager;
 
     public enum GameState
     {
@@ -22,6 +23,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
+        levelManager = FindFirstObjectByType<LevelManager>();
         StartGame();
     }
 
@@ -44,6 +46,8 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = GAME_TIMESCALE;
 
         UIManager.SetupUI();
+
+        levelManager.Setup();
 
         BeginPlaying();
     }

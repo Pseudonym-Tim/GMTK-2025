@@ -1,0 +1,6 @@
+{
+	"test_object": {
+		"name": "test_object",
+		"prefab": "TestObject"
+	}
+}

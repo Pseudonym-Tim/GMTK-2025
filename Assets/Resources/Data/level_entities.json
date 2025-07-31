@@ -1,0 +1,10 @@
+{
+	"player": {
+		"name": "Player",
+		"prefab": "Player"
+	},
+	"bullet_projectile": {
+		"name": "Bullet Projectile",
+		"prefab": "BulletProjectile"
+	}
+}

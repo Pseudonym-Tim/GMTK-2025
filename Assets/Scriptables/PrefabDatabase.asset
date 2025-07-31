@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b486182a9878440be4b2c7cb94174c, type: 3}
   m_Name: PrefabDatabase
   m_EditorClassIdentifier: 
-  registeredPrefabs: []
+  registeredPrefabs:
+  - {fileID: 414291638989575356, guid: b6166efa68ec2c14c91d665e2a1c0e2a, type: 3}
+  - {fileID: 3502024025840182255, guid: 649bfd4cc17d82f4cb9c437f0256b604, type: 3}
