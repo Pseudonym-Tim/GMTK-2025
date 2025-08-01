@@ -11,6 +11,7 @@ public static class LayerManager
         public static int LEVEL = 3;
         public static int PLAYER = 6;
         public static int ENEMY = 7;
+        public static int ASTEROID = 8;
     }
 
     public static class SortingLayers
@@ -24,6 +25,7 @@ public static class LayerManager
         public static LayerMask LEVEL = 1 << Layers.LEVEL;
         public static LayerMask PLAYER = 1 << Layers.PLAYER;
         public static LayerMask ENEMY = 1 << Layers.ENEMY;
+        public static LayerMask ASTEROID = 1 << Layers.ASTEROID;
     }
 
     public static int ToLayerID(LayerMask layerMask)

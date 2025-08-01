@@ -14,14 +14,17 @@ public class LevelManager : Singleton<LevelManager>
     public List<LevelObject> LevelObjects { get; private set; } = new List<LevelObject>();
 
     [SerializeField] private PrefabDatabase prefabDatabase;
+    private static EnemyWaveManager enemyWaveManager;
 
     public void Setup()
     {
         InitializeLevel();
 
-        // Temporarily spawning the player entity here...
         // TODO: Ideally, spawn the player after a short cutscene or intro sequence?
-        Player playerEntity = (Player)SpawnEntity("player", Vector2.zero);
+        Player playerEntity = (Player)SpawnEntity("player_spaceship", Vector2.zero);
+
+        enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
+        enemyWaveManager.Setup();
     }
 
     private void InitializeLevel()
@@ -178,6 +181,8 @@ public class LevelManager : Singleton<LevelManager>
 
         foreach(Entity entity in LevelEntities)
         {
+            if(entity == null || entity.Equals(null)) { continue; }
+
             if(entity is T)
             {
                 entityList.Add(entity as T);
@@ -193,12 +198,11 @@ public class LevelManager : Singleton<LevelManager>
 
         foreach(Entity entity in LevelEntities)
         {
-            if(entity is T)
+            if(entity == null || entity.Equals(null)) { continue; }
+
+            if(entity is T && Vector2.Distance(origin, entity.CenterOfMass) <= range)
             {
-                if(Vector2.Distance(origin, entity.CenterOfMass) <= range)
-                {
-                    entityList.Add(entity as T);
-                }
+                entityList.Add(entity as T);
             }
         }
 

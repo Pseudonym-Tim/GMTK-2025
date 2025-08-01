@@ -79,8 +79,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 10
-  overlapBoxSize: {x: 0.15, y: 0.15}
-  overlapBoxOffset: {x: 0, y: 0}
+  hitBoxSize: {x: 0.125, y: 0.125}
+  hitBoxOffset: {x: 0, y: 0}
+  bulletGFX: {fileID: 4363662120493477640}
+  wrapBoundsSize: {x: 0.5, y: 0.5}
+  wrapBoundsOffset: {x: 0, y: 0}
+  maxWraps: 3
+  playerBulletSprite: {fileID: 1723936360, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  enemyBulletSprite: {fileID: -1727240800, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
 --- !u!50 &6856135242450032506
 Rigidbody2D:
   serializedVersion: 5

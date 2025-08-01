@@ -4,14 +4,26 @@ using UnityEngine;
 /// A bullet projectile entity...
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class BulletProjectile : Entity
+public class BulletProjectile : Entity, IScreenWrappable
 {
-    private const int LIFETIME = 10;
+    private const float IGNORE_TIME = 0.25f;
 
+    [Header("Projectile Settings")]
     [SerializeField] private float bulletSpeed = 10f;
-    [SerializeField] private Vector2 overlapBoxSize = new Vector2(0.5f, 0.5f);
-    [SerializeField] private Vector2 overlapBoxOffset = Vector2.zero;
+    [SerializeField] private Vector2 hitBoxSize = new Vector2(0.5f, 0.5f);
+    [SerializeField] private Vector2 hitBoxOffset = Vector2.zero;
+    [SerializeField] private SpriteRenderer bulletGFX;
 
+    [Header("Screenwrap")]
+    [SerializeField] private Vector2 wrapBoundsSize = new Vector2(0.5f, 0.5f);
+    [SerializeField] private Vector2 wrapBoundsOffset = Vector2.zero;
+    [SerializeField] private int maxWraps = 3;
+
+    [Header("Bullet Sprites")]
+    [SerializeField] private Sprite playerBulletSprite;
+    [SerializeField] private Sprite enemyBulletSprite;
+
+    private float ignoreTimer = 0f;
     private Rigidbody2D bulletRigidbody2D;
 
     protected override void OnEntityAwake()
@@ -19,37 +31,106 @@ public class BulletProjectile : Entity
         bulletRigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    public void Setup(Vector2 direction, float overrideSpeed = -1)
+    public void Setup(BulletOwner owner, Vector2 direction, float overrideSpeed = -1)
     {
-        DestroyEntity(LIFETIME);
+        Owner = owner;
+
+        ScreenwrapsUsed = 0;
+        ScreenwrapManager.Register(this);
+
         if(overrideSpeed > 0) { bulletSpeed = overrideSpeed; }
         bulletRigidbody2D.linearVelocity = direction.normalized * bulletSpeed;
+
+        // Set sprite and collision ignore timer based on owner...
+        if(Owner == BulletOwner.PLAYER)
+        {
+            bulletGFX.sprite = playerBulletSprite;
+            ignoreTimer = IGNORE_TIME;
+        }
+        else
+        {
+            bulletGFX.sprite = enemyBulletSprite;
+            ignoreTimer = 0f;
+        }
     }
 
     private void FixedUpdate()
     {
-        Vector2 rotatedOffset = Quaternion.Euler(0, 0, EntityEulerAngles.z) * overlapBoxOffset;
+        if(ignoreTimer > 0f)
+        {
+            ignoreTimer -= Time.fixedDeltaTime;
+        }
 
+        Vector2 rotatedOffset = Quaternion.Euler(0, 0, EntityEulerAngles.z) * hitBoxOffset;
         Vector3 checkPos = EntityPosition + rotatedOffset;
 
-        LayerMask layerMask = LayerManager.Masks.ENEMY;
-        Collider2D hitCollider = Physics2D.OverlapBox(checkPos, overlapBoxSize, EntityEulerAngles.z, layerMask);
+        LayerMask layerMask = LayerManager.Masks.ASTEROID;
+
+        if(Owner == BulletOwner.PLAYER)
+        {
+            layerMask |= LayerManager.Masks.ENEMY;
+            if(ignoreTimer <= 0f) { layerMask |= LayerManager.Masks.PLAYER; }
+        }
+        else
+        {
+            layerMask |= LayerManager.Masks.PLAYER;
+            if(ignoreTimer <= 0f) { layerMask |= LayerManager.Masks.ENEMY; }
+        }
+
+        Collider2D hitCollider = Physics2D.OverlapBox(checkPos, hitBoxSize, EntityEulerAngles.z, layerMask);
 
         if(hitCollider != null && hitCollider.gameObject != EntityObject)
         {
-            // TODO: Deal damage or destroy hit enemy entity...
+            Asteroid asteroidEntity = hitCollider.GetComponentInParent<Asteroid>();
+            asteroidEntity?.TakeDamage();
+
+            Player playerEntity = hitCollider.GetComponentInParent<Player>();
+            playerEntity?.TakeDamage();
+
+            Enemy enemyEntity = hitCollider.GetComponentInParent<Enemy>();
+            enemyEntity?.TakeDamage(1, this);
+
+            ScreenwrapManager.Unregister(this);
             DestroyEntity();
         }
+    }
+
+    public void OnScreenwrap()
+    {
+
     }
 
     protected override void OnDrawEntityGizmos()
     {
         Gizmos.color = Color.red;
-        Vector2 rotatedOffset = Quaternion.Euler(0, 0, EntityEulerAngles.z) * overlapBoxOffset;
+        Vector2 rotatedOffset = Quaternion.Euler(0, 0, EntityEulerAngles.z) * hitBoxOffset;
         Vector3 checkPos = EntityPosition + rotatedOffset;
         Matrix4x4 originalMatrix = Gizmos.matrix;
         Gizmos.matrix = Matrix4x4.TRS(checkPos, Quaternion.Euler(0, 0, EntityEulerAngles.z), Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, overlapBoxSize);
+        Gizmos.DrawWireCube(Vector3.zero, hitBoxSize);
         Gizmos.matrix = originalMatrix;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Vector2 pos = EntityPosition + ScreenwrapBoundsOffset;
+        Vector3 center3D = new Vector3(pos.x, pos.y, 0f);
+        Vector3 size3D = new Vector3(ScreenwrapBoundsSize.x, ScreenwrapBoundsSize.y, 0f);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(center3D, size3D);
+    }
+
+    public BulletOwner Owner { get; private set; }
+
+    public Vector2 ScreenwrapBoundsSize { get => wrapBoundsSize; }
+    public Vector2 ScreenwrapBoundsOffset { get => wrapBoundsOffset; }
+    public int MaxScreenwraps { get => maxWraps; }
+    public int ScreenwrapsUsed { get; set; }
+
+    public enum BulletOwner 
+    { 
+        PLAYER, 
+        ENEMY 
     }
 }

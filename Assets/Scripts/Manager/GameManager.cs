@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles core game related stuff and setup...
@@ -12,6 +13,7 @@ public class GameManager : Singleton<GameManager>
     public static float InGameTimer { get; private set; } = 0.0f;
     private static float previousTimeScale = 0;
     private static LevelManager levelManager;
+    private static ScoreManager scoreManager;
 
     public enum GameState
     {
@@ -24,6 +26,7 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
         levelManager = FindFirstObjectByType<LevelManager>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
         StartGame();
     }
 
@@ -45,9 +48,11 @@ public class GameManager : Singleton<GameManager>
         InGameTimer = 0.0f;
         Time.timeScale = GAME_TIMESCALE;
 
-        UIManager.SetupUI();
+        scoreManager.Setup();
 
         levelManager.Setup();
+
+        UIManager.SetupUI();
 
         BeginPlaying();
     }

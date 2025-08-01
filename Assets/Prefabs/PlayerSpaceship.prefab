@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 4305300250491174026}
   - component: {fileID: 1808594748293497914}
   - component: {fileID: 137195427209502820}
-  m_Layer: 0
-  m_Name: Player
+  m_Layer: 6
+  m_Name: PlayerSpaceship
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,12 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b53ae96e5e72ff44a5b5197478593ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: 5
-  moveAcceleration: 10
-  moveDeceleration: 5
-  moveSpeed: 5
+  maxHealth: 3
+  rotateSpeed: 6
+  moveAcceleration: 20
+  moveDeceleration: 10
+  moveSpeed: 4
   shootPoint: {fileID: 4111536061532139952}
   shootCooldown: 0.25
+  wrapBoundsSize: {x: 1, y: 1}
+  wrapBoundsOffset: {x: 0, y: -0.075}
 --- !u!114 &1345569535054365040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,8 +85,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullData:
-    center: {x: 0, y: -0.05}
-    size: {x: 0.25, y: 0.25}
+    Type: 0
+    Center: {x: 0, y: -0.05}
+    Size: {x: 0.225, y: 0.225}
+    Radius: 0.2
 --- !u!50 &1808594748293497914
 Rigidbody2D:
   serializedVersion: 5
@@ -94,7 +99,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 414291638989575356}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
@@ -378,7 +383,7 @@ GameObject:
   - component: {fileID: 7021803448451892701}
   - component: {fileID: 3792148831453402935}
   m_Layer: 0
-  m_Name: PlayerGFX
+  m_Name: ShipGFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -442,7 +447,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1728717574, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -529,7 +534,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 894599178, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

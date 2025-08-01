@@ -8,10 +8,12 @@ public class Entity : MonoBehaviour
     private void Awake() => OnEntityAwake();
     private void OnDestroy() => OnEntityDestroyed();
     private void Update() => OnEntityUpdate();
+    private void OnCollisionEnter2D(Collision2D collision2D) => OnEntityCollision2D(collision2D);
 
     protected virtual void OnEntityAwake() { }
     public virtual void OnEntitySpawn() { }
     protected virtual void OnEntityUpdate() { }
+    protected virtual void OnEntityCollision2D(Collision2D collision2D) { }
     protected virtual void OnEntityDestroyed() { }
 
     public void DestroyEntity(float destroyTime = 0)

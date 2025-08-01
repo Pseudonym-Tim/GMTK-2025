@@ -1,4 +1,4 @@
-Shader "GMTK 2025/SpriteDropShadow"
+﻿Shader "GMTK 2025/SpriteDropShadow"
 {
     Properties
     {
@@ -61,20 +61,20 @@ Shader "GMTK 2025/SpriteDropShadow"
             };
 
             fixed4 _ShadowColor;
-            float4 _ShadowOffset;
+            float2 _ShadowOffset;
             float _Scale;
-            float _RotationZ;
 
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
 
-                float2 rotatedPosition = RotateZ(IN.vertex.xy * _Scale, _RotationZ);
-                float4 transformedVertex = float4(rotatedPosition, IN.vertex.z, IN.vertex.w) + _ShadowOffset;
+                float4 clipPos = UnityObjectToClipPos(IN.vertex);
 
-                OUT.vertex = UnityObjectToClipPos(transformedVertex);
+                clipPos.xy += (IN.vertex.xy * _Scale - IN.vertex.xy) + _ShadowOffset * clipPos.w;
+
+                OUT.vertex  = clipPos;
                 OUT.texcoord = IN.texcoord;
-                OUT.color = IN.color * _ShadowColor;
+                OUT.color    = IN.color * _ShadowColor;
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -85,19 +85,17 @@ Shader "GMTK 2025/SpriteDropShadow"
 
             sampler2D _MainTex;
             sampler2D _AlphaTex;
-            float _AlphaSplitEnabled;
+            float    _AlphaSplitEnabled;
 
             fixed4 SampleSpriteTexture(float2 uv)
             {
-                fixed4 color = tex2D(_MainTex, uv);
-                color.rgb = _ShadowColor.rgb;
-
+                fixed4 c = tex2D(_MainTex, uv);
                 #if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
-                if (_AlphaSplitEnabled)
-                    color.a = tex2D(_AlphaTex, uv).r;
+                    if (_AlphaSplitEnabled)
+                        c.a = tex2D(_AlphaTex, uv).r;
                 #endif
-
-                return color;
+                c.rgb = _ShadowColor.rgb;
+                return c;
             }
 
             fixed4 frag(v2f IN) : SV_Target

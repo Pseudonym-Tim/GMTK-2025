@@ -1,10 +1,18 @@
 {
-	"player": {
-		"name": "Player",
-		"prefab": "Player"
+	"player_spaceship": {
+		"name": "Player Spaceship",
+		"prefab": "PlayerSpaceship"
 	},
 	"bullet_projectile": {
 		"name": "Bullet Projectile",
 		"prefab": "BulletProjectile"
+	},
+	"asteroid": {
+		"name": "Asteroid",
+		"prefab": "Asteroid"
+	},
+	"enemy_spaceship": {
+		"name": "Enemy Spaceship",
+		"prefab": "EnemySpaceship"
 	}
 }

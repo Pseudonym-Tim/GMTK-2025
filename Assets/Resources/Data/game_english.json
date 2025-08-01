@@ -1,5 +1,10 @@
 {
     "player_hud": {
-        "testText": "<color=#ffffff>TEST!</color>"
+        "currentScoreText": "<color=#ffffff><u>SCORE:</u>%currentScore%</color>",
+        "highscoreText": "<color=#ffffff><u>HIGHSCORE:</u>%highscore%</color>",
+        "currentHealthText": "<color=#ffffff><u>CURRENT HEALTH:</u>%healthAmount%</color>",
+        "pointsAwardText": "<color=#ffffff>+%pointAmount%</color>",
+        "currentWaveText": "<color=#ffffff><u>WAVE:</u>%currentWave%/%maxWave%</color>",
+        "currentStageText": "<color=#ffffff><u>CURRENT STAGE:</u>%currentStage%</color>"
     }
 }
