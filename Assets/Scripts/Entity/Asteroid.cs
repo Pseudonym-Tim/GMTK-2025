@@ -92,17 +92,7 @@ public class Asteroid : Entity, IScreenWrappable
             otherEnemyRigidbody2D.linearVelocity = knockbackDir * knockbackForceOtherEnemy;
         }
 
-        //OnDeath();
         TakeDamage();
-
-        /*Player playerEntity = collider2D.GetComponentInParent<Player>();
-        playerEntity?.TakeDamage();
-
-        Enemy enemyEntity = collider2D.GetComponentInParent<Enemy>();
-        enemyEntity?.TakeDamage();
-
-        ScreenwrapManager.Unregister(this);
-        DestroyEntity();*/
     }
 
     public void TakeDamage(int damageToTake = 1, BulletProjectile bulletProjectile = null)

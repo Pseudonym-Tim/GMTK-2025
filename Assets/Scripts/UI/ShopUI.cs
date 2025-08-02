@@ -38,10 +38,6 @@ public class ShopUI : UIComponent
             AnimationRoot.localRotation = Quaternion.Euler(0f, 0f, 0f);
             StartCoroutine(AnimateTransformOpen(0.5f));
         }
-        else
-        {
-            fadeUI.FadeOut();
-        }
     }
 
     private void Update()
@@ -108,7 +104,12 @@ public class ShopUI : UIComponent
             shopEntryUIList.Add(entryUI);
         }
 
-        selectedIndex = 0;
+        selectedIndex = 0; 
+        
+        if(shopEntryUIList.Count > 0)
+        {
+            shopEntryUIList[0].SetHovered(true);
+        }
     }
 
     public void UpdateShopItemCostText(int index, string text)

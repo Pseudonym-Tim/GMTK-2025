@@ -65,6 +65,7 @@ public class ShopManager : Singleton<ShopManager>
 
             shopUI.IsInteractionEnabled = false;
             FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
+            fadeUI.FadeOut();
             StartCoroutine(CloseStoreAfterDelay(FadeUI.DEFAULT_FADE_TIME));
         }
         else
@@ -78,6 +79,10 @@ public class ShopManager : Singleton<ShopManager>
         yield return new WaitForSeconds(delay);
         ShopUI shopUI = UIManager.GetUIComponent<ShopUI>();
         shopUI.Show(false);
+        FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
+        fadeUI.FadeIn();
+        EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
+        enemyWaveManager.OnShopSelectionComplete();
     }
 
     public IReadOnlyList<ShopItem> CurrentItems
