@@ -45,5 +45,6 @@ public class UIComponent : MonoBehaviour
     }
 
     public virtual bool IsShown => UICanvas.enabled;
+    public virtual bool IsInteractable => UICanvasGroup.interactable;
     public GameObject UIObject => gameObject;
 }

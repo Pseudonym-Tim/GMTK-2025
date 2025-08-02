@@ -1,4 +1,4 @@
-﻿Shader "GMTK 2025/SpriteDropShadow"
+﻿Shader "RECURSION: 2099/SpriteDropShadow"
 {
     Properties
     {

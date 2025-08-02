@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles core game related stuff and setup...
@@ -7,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     private const float GAME_TIMESCALE = 1.0f;
-    public const string GAME_NAME = "GMTK 2025";
+    public const string GAME_NAME = "RECURSION: 2099";
 
     public static GameState CurrentGameState { get; set; } = GameState.INACTIVE;
     public static float InGameTimer { get; private set; } = 0.0f;
@@ -48,9 +47,9 @@ public class GameManager : Singleton<GameManager>
         InGameTimer = 0.0f;
         Time.timeScale = GAME_TIMESCALE;
 
-        scoreManager.Setup();
+        scoreManager?.Setup();
 
-        levelManager.Setup();
+        levelManager?.Setup();
 
         UIManager.SetupUI();
 

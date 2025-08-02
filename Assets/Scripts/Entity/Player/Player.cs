@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 /// <summary>
 /// Player spaceship entity...
@@ -35,6 +36,7 @@ public class Player : Entity, IScreenWrappable
         levelManager = FindFirstObjectByType<LevelManager>();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         PlayerCamera = GetComponentInChildren<PlayerCamera>();
+        PlayerStatistics = GetComponent<PlayerStatistics>();
     }
 
     public override void OnEntitySpawn()
@@ -111,11 +113,28 @@ public class Player : Entity, IScreenWrappable
     {
         ScreenwrapManager.Unregister(this);
         DestroyEntity();
+
+        const int GAMEOVER_DELAY = 1;
+        Invoke(nameof(TriggerGameOver), GAMEOVER_DELAY);
     }
 
     public void OnScreenwrap()
     {
 
+    }
+
+    public void TriggerGameOver()
+    {
+        GameOverUI gameOverUI = UIManager.GetUIComponent<GameOverUI>();
+
+        int totalKills = PlayerStatistics.TotalKills;
+        int recursionCount = PlayerStatistics.RecursionCount;
+        int nearMissCount = PlayerStatistics.NearMissCount;
+        int wavesComplete = PlayerStatistics.WavesComplete;
+        int stagesComplete = PlayerStatistics.StagesComplete;
+        gameOverUI.InitStats(totalKills, recursionCount, nearMissCount, wavesComplete, stagesComplete);
+
+        gameOverUI.Show(true);
     }
 
     private void OnDrawGizmosSelected()
@@ -128,6 +147,7 @@ public class Player : Entity, IScreenWrappable
         Gizmos.DrawWireCube(center3D, size3D);
     }
 
+    public PlayerStatistics PlayerStatistics { get; set; } = null;
     public Vector2 ScreenwrapBoundsSize { get => wrapBoundsSize; }
     public Vector2 ScreenwrapBoundsOffset { get => wrapBoundsOffset; }
     public int MaxScreenwraps { get => -1; }

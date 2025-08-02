@@ -1,4 +1,4 @@
-﻿Shader "GMTK 2025/TextUnderlay"
+﻿Shader "RECURSION: 2099/TextUnderlay"
 {
     Properties
     {

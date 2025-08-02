@@ -33,6 +33,18 @@ public class ScoreManager : Singleton<ScoreManager>
         CheckUpdateHighscore();
     }
 
+    public void RemoveScore(int scoreToAdd)
+    {
+        CurrentScore -= scoreToAdd;
+
+        if(CurrentScore <= 0)
+        {
+            CurrentScore = 0;
+        }
+
+        playerHUD.UpdateCurrentScore(CurrentScore);
+    }
+
     private void CheckUpdateHighscore()
     {
         if(CurrentScore > CurrentHighscore)

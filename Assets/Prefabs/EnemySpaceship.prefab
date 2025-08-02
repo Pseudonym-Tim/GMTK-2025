@@ -49,10 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  pointsToAward: 300
   wrapBoundsSize: {x: 1, y: 1}
   wrapBoundsOffset: {x: 0, y: -0.075}
-  rotateSpeed: 100
-  moveAcceleration: 10
+  rotateSpeed: 50
+  moveAcceleration: 5
   moveDeceleration: 5
   moveSpeed: 3
   shootPoint: {fileID: 3947782592386884603}

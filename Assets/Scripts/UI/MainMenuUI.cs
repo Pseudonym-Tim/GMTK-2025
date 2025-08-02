@@ -1,0 +1,166 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+/// <summary>
+/// Handles everything related to the main menu UI...
+/// </summary>
+public class MainMenuUI : UIComponent
+{
+    private const float BOB_FREQUENCY = 5.0f;
+    private const float BOB_AMPLITUDE = 10.0f;
+
+    private const float OPTION_DARKEN_FACTOR = 0.75f;
+
+    public Image logoImage;
+    [SerializeField] private MenuOption[] menuOptions;
+
+    private int selectedIndex = 0;
+    private Color[] originalPanelColors;
+    private Color[] originalTextColors;
+    private Vector3 initialLogoPosition;
+    private FadeUI fadeUI;
+
+    [System.Serializable]
+    public class MenuOption
+    {
+        public Image backgroundImage;
+        public TextMeshProUGUI optionText;
+    }
+
+    public override void SetupUI()
+    {
+        fadeUI = UIManager.GetUIComponent<FadeUI>();
+        fadeUI.FadeIn();
+        initialLogoPosition = logoImage.rectTransform.localPosition;
+        SetCanvasInteractivity(true);
+        CacheOriginalColors();
+        HighlightOption(selectedIndex);
+    }
+
+    private void Update()
+    {
+        if(!IsInteractable) { return; }
+
+        if(InputManager.IsButtonPressed("NavigateDown") || InputManager.IsButtonPressed("NavigateUp"))
+        {
+            NavigateOption(-1);
+        }
+        else if(InputManager.IsButtonPressed("NavigateLeft") || InputManager.IsButtonPressed("NavigateRight"))
+        {
+            NavigateOption(1);
+        }
+
+        if(InputManager.IsButtonPressed("SelectOption"))
+        {
+            SelectOption(selectedIndex);
+        }
+    }
+
+    private void LateUpdate() => UpdateLogoBob();
+
+    private void UpdateLogoBob()
+    {
+        Vector3 bobbingPosition = initialLogoPosition;
+        bobbingPosition.y += Mathf.Sin(Time.time * BOB_FREQUENCY) * BOB_AMPLITUDE;
+        logoImage.rectTransform.localPosition = bobbingPosition;
+    }
+
+    private void CacheOriginalColors()
+    {
+        originalPanelColors = new Color[menuOptions.Length];
+        originalTextColors = new Color[menuOptions.Length];
+
+        for(int i = 0; i < menuOptions.Length; i++)
+        {
+            originalPanelColors[i] = menuOptions[i].backgroundImage.color;
+            originalTextColors[i] = menuOptions[i].optionText.color;
+        }
+    }
+
+    private void NavigateOption(int direction)
+    {
+        selectedIndex = (selectedIndex + direction + menuOptions.Length) % menuOptions.Length;
+        HighlightOption(selectedIndex);
+    }
+
+    private void HighlightOption(int index)
+    {
+        for(int i = 0; i < menuOptions.Length; i++)
+        {
+            Image panelImage = menuOptions[i].backgroundImage.GetComponent<Image>();
+            TextMeshProUGUI textMesh = menuOptions[i].optionText;
+
+            if(i == index)
+            {
+                panelImage.color = originalPanelColors[i];
+                textMesh.color = originalTextColors[i];
+            }
+            else
+            {
+                Color dimmedPanel = originalPanelColors[i];
+                dimmedPanel.r *= OPTION_DARKEN_FACTOR;
+                dimmedPanel.g *= OPTION_DARKEN_FACTOR;
+                dimmedPanel.b *= OPTION_DARKEN_FACTOR;
+
+                Color dimmedText = originalTextColors[i];
+                dimmedText.r *= OPTION_DARKEN_FACTOR;
+                dimmedText.g *= OPTION_DARKEN_FACTOR;
+                dimmedText.b *= OPTION_DARKEN_FACTOR;
+
+                panelImage.color = dimmedPanel;
+                textMesh.color = dimmedText;
+            }
+        }
+    }
+
+    public void SelectOption(int optionIndex)
+    {
+        switch(optionIndex)
+        {
+            case 0: // Start...
+                BeginFade();
+                break;
+            case 1: // TODO: Tutorial popup...
+                Debug.Log("Tutorial!");
+                break;
+            case 2: // TODO: Options popup...
+                Debug.Log("Options!");
+                break;
+            case 3: // TODO: Credits...
+                BeginFade();
+                Debug.Log("Credits!");
+                break;
+            case 4: // Quit game...
+                BeginFade();
+                break;
+        }
+
+        SetCanvasInteractivity(false);
+    }
+
+    private void BeginFade()
+    {
+        FadeUI.OnFadeOutComplete += OnFadeOutComplete;
+        fadeUI.FadeOut();
+    }
+
+    private void OnFadeOutComplete()
+    {
+        FadeUI.OnFadeOutComplete -= OnFadeOutComplete;
+
+        switch(selectedIndex)
+        {
+            case 0: // Start...
+                SceneManager.LoadScene(1);
+                break;
+            case 3:  // TODO: Credits...
+
+                break;
+            case 4: // Quit game...
+                Application.Quit();
+                break;
+        }
+    }
+}

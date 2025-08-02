@@ -6,5 +6,18 @@
         "pointsAwardText": "<color=#ffffff>+%pointAmount%</color>",
         "currentWaveText": "<color=#ffffff><u>WAVE:</u>%currentWave%/%maxWave%</color>",
         "currentStageText": "<color=#ffffff><u>CURRENT STAGE:</u>%currentStage%</color>"
+    },
+    "shop_ui": {
+        "shopPointsText": "<color=#ffffff><u>POINTS REMAINING:</u>%currentPoints%</color>",
+        "shopPurchaseSuccessText": "<color=#ffffff>THANKS FOR THE PURCHASE, GOOD LUCK OUT THERE!</color>",
+        "shopInfoBoughtText": "<color=#ffffff>SOLD!</color>",
+        "shopNotEnoughPoints": "<color=#ffffff>WHAT DO YOU THINK THIS IS, A CHARITY? BUY SOMETHING OR GET LOST!</color>"
+    },
+    "gameover_ui": {
+        "killsText": "<color=#ffffff><u>KILLS:</u>%kills%</color>",
+        "recursionText": "<color=#ffffff><u>SUCCESSFUL RECURSIONS:</u>%recursion%</color>",
+        "nearMissText": "<color=#ffffff><u>NEAR MISSES:</u>%nearMiss%</color>",
+        "waveCompleteText": "<color=#ffffff><u>WAVES COMPLETED:</u>%waves%</color>",
+        "stageCompleteText": "<color=#ffffff><u>STAGES COMPLETED:</u>%stages%</color>"
     }
 }

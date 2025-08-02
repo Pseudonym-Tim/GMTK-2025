@@ -25,10 +25,12 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
     private int lastWaveCount;
     private LevelManager levelManager;
     private PlayerHUD playerHUD;
+    private ShopManager shopManager;
 
     private void Awake()
     {
         playerHUD = UIManager.GetUIComponent<PlayerHUD>();
+        shopManager = FindFirstObjectByType<ShopManager>();
         levelManager = FindFirstObjectByType<LevelManager>();
     }
 
@@ -43,10 +45,23 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         currentWave = 0;
         lastWaveCount = initialEnemyCount;
 
+        ResetPlayerEntity();
+
         playerHUD.UpdateCurrentStage(currentStage);
         playerHUD.UpdateCurrentWave(currentWave, wavesPerStage);
 
         StartNextWave();
+    }
+
+    private void ResetPlayerEntity()
+    {
+        Player player = levelManager.GetEntity<Player>();
+
+        if(player != null)
+        {
+            player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            player.Teleport(Vector2.zero);
+        }
     }
 
     private void StartNextWave()
@@ -58,7 +73,7 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
 
         if(currentWave > wavesPerStage)
         {
-            OpenShop();
+            shopManager.OpenShop();
             currentStage++;
             SetupStage();
             return;
@@ -67,7 +82,7 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         // Every shop wave, open the shop and fuck off to wait for player choice...
         if(currentWave % shopEveryWave == 0)
         {
-            OpenShop();
+            shopManager.OpenShop();
             return;
         }
 
@@ -153,10 +168,5 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         {
             return new Vector3(xPos, center.y + height / 2f + 1f, 0f);
         }
-    }
-
-    private void OpenShop()
-    {
-        // TODO: Open shop...
     }
 }
