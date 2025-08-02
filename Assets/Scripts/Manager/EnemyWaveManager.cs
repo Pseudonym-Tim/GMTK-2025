@@ -42,6 +42,8 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
 
     private void SetupStage()
     {
+        StartCoroutine(SpawnAsteroids(minAsteroids));
+
         currentWave = 0;
         lastWaveCount = initialEnemyCount;
 
@@ -79,26 +81,27 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
             return;
         }
 
-        // Every shop wave, open the shop and fuck off to wait for player choice...
-        if(currentWave % shopEveryWave == 0)
-        {
-            shopManager.OpenShop();
-            return;
-        }
-
         StartCoroutine(WaveCoroutine());
     }
 
-    // TODO: Call after the player has bought upgrades and whatnot...
     public void OnShopSelectionComplete()
     {
-        StartCoroutine(WaveCoroutine());
+        StartNextWave();
     }
 
     private IEnumerator WaveCoroutine()
     {
-        // TODO: Wave incoming warning...
-        Debug.Log("Wave " + currentWave + " incoming!");
+        // If this is the first wave of the stage, show stage indication before anything else...
+        if(currentWave == 1)
+        {
+            yield return StartCoroutine(playerHUD.ShowStageStartAnnouncement(currentStage));
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        bool shopAfterWave = (currentWave % shopEveryWave == 0);
+        yield return StartCoroutine(playerHUD.ShowWaveIncomingWarning(shopAfterWave));
+
         yield return new WaitForSeconds(waveStartDelay);
 
         int spawnCount = (currentWave == 1) ? lastWaveCount : (lastWaveCount = lastWaveCount + Random.Range(extraEnemiesMin, extraEnemiesMax + 1));
@@ -112,7 +115,17 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         // TODO: Might want to check if all are not alive instead, so currentHealth <= 0 or something...
         yield return new WaitUntil(() => levelManager.GetEntities<Enemy>().Count == 0);
 
-        StartNextWave();
+        // Open shop only after completing every 5th wave...
+        if(currentWave % shopEveryWave == 0)
+        {
+            FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
+            yield return fadeUI.FadeOut();
+            shopManager.OpenShop();
+        }
+        else
+        {
+            StartNextWave();
+        }
     }
 
     private IEnumerator SpawnEnemies(int count)

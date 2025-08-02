@@ -4,16 +4,23 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles everything related to the gameover UI...
+/// </summary>
 public class GameOverUI : UIComponent
 {
-    [SerializeField]
-    private Image destroyedHeaderImage;
+    private const float OPTION_DARKEN_FACTOR = 0.75f;
 
-    [SerializeField]
-    private TextMeshProUGUI finalScoreText;
+    [SerializeField] private Image destroyedHeaderImage;
+    [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private TextMeshProUGUI newHighscoreText;
 
-    [SerializeField]
-    private TextMeshProUGUI newHighscoreText;
+    [SerializeField] private StatReport[] statReports;
+    [SerializeField] private float scaleDuration = 0.5f;
+    [SerializeField] private float shakeDuration = 0.5f;
+    [SerializeField] private float shakeMagnitude = 10f;
+    [SerializeField] private float reportCountDuration = 1f;
+    [SerializeField] private float scoreAddDuration = 0.5f;
 
     [System.Serializable]
     private class StatReport
@@ -27,26 +34,6 @@ public class GameOverUI : UIComponent
         public string template;
     }
 
-    [SerializeField]
-    private StatReport[] statReports;
-
-    [SerializeField]
-    private float scaleDuration = 0.5f;
-
-    [SerializeField]
-    private float shakeDuration = 0.5f;
-
-    [SerializeField]
-    private float shakeMagnitude = 10f;
-
-    [SerializeField]
-    private float reportCountDuration = 1f;
-
-    [SerializeField]
-    private float scoreAddDuration = 0.5f;
-
-    private const float OPTION_DARKEN_FACTOR = 0.75f;
-
     [System.Serializable]
     public class MenuOption
     {
@@ -54,8 +41,7 @@ public class GameOverUI : UIComponent
         public TextMeshProUGUI optionText;
     }
 
-    [SerializeField]
-    private MenuOption[] menuOptions;
+    [SerializeField] private MenuOption[] menuOptions;
 
     private int selectedIndex;
 

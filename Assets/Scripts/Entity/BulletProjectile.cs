@@ -82,7 +82,7 @@ public class BulletProjectile : Entity, IScreenWrappable
         if(hitCollider != null && hitCollider.gameObject != EntityObject)
         {
             Asteroid asteroidEntity = hitCollider.GetComponentInParent<Asteroid>();
-            asteroidEntity?.TakeDamage();
+            asteroidEntity?.TakeDamage(1, this);
 
             Player playerEntity = hitCollider.GetComponentInParent<Player>();
             playerEntity?.TakeDamage();

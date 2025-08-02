@@ -43,12 +43,40 @@ public class Enemy : Entity, IScreenWrappable
 
     protected override void OnEntityCollision2D(Collision2D collision2D)
     {
+        Player player = collision2D.gameObject.GetComponent<Player>();
+
+        if(player != null)
+        {
+            player.TakeDamage(1);
+            TakeDamage(1);
+
+            Vector2 knockbackDir = (player.CenterOfMass - CenterOfMass).normalized;
+
+            Rigidbody2D playerRigidbody2D = player.GetComponent<Rigidbody2D>();
+
+            float knockbackForceEnemy = 5f;
+            float knockbackForcePlayer = 5f;
+
+            enemyRigidbody2D.linearVelocity = -knockbackDir * knockbackForceEnemy;
+            playerRigidbody2D.linearVelocity = knockbackDir * knockbackForcePlayer;
+        }
+
         Enemy otherEnemy = collision2D.gameObject.GetComponent<Enemy>();
 
         if(otherEnemy != null && otherEnemy != this)
         {
-            ScreenwrapManager.Unregister(this);
-            DestroyEntity();
+            otherEnemy.TakeDamage(1);
+            TakeDamage(1);
+
+            Vector2 knockbackDir = (otherEnemy.CenterOfMass - CenterOfMass).normalized;
+
+            Rigidbody2D otherEnemyRigidbody2D = otherEnemy.GetComponent<Rigidbody2D>();
+
+            float knockbackForceThisEnemy = 5f;
+            float knockbackForceOtherEnemy = 5f;
+
+            enemyRigidbody2D.linearVelocity = -knockbackDir * knockbackForceThisEnemy;
+            otherEnemyRigidbody2D.linearVelocity = knockbackDir * knockbackForceOtherEnemy;
         }
     }
 

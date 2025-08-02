@@ -18,6 +18,9 @@ public class LevelManager : Singleton<LevelManager>
 
     public void Setup()
     {
+        FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
+        fadeUI.FadeIn();
+
         InitializeLevel();
 
         // TODO: Ideally, spawn the player after a short cutscene or intro sequence?
@@ -45,7 +48,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void ClearLevel()
     {
-        RemoveEntities(false);
+        RemoveEntities(true);
         RemoveObjects();
     }
 

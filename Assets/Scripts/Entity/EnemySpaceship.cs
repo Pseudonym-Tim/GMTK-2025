@@ -155,16 +155,23 @@ public class EnemySpaceship : Enemy
         if(playerDistance < avoidanceRange)
         {
             Vector2 awayFromPlayer = EntityPosition - playerEntity.CenterOfMass;
-            avoidanceDir += awayFromPlayer.normalized / awayFromPlayer.magnitude;
-        }
 
-        if(avoidanceDir != Vector2.zero)
+            if(awayFromPlayer != Vector2.zero)
+            {
+                avoidanceDir = awayFromPlayer.normalized;
+            }
+        }
+        else
         {
-            avoidanceDir.Normalize();
+            if(avoidanceDir != Vector2.zero)
+            {
+                avoidanceDir.Normalize();
+            }
+
+            avoidanceDir = (direction + avoidanceDir * avoidanceStrength).normalized;
         }
 
-        Vector2 finalDir = (direction + avoidanceDir * avoidanceStrength).normalized;
-        Vector2 desiredVel = finalDir * moveSpeed;
+        Vector2 desiredVel = avoidanceDir * moveSpeed;
         Vector2 newVel = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVel, moveAcceleration * Time.fixedDeltaTime);
         enemyRigidbody2D.linearVelocity = newVel;
     }
@@ -178,10 +185,8 @@ public class EnemySpaceship : Enemy
             return;
         }
 
-        Vector2 aimDir = isTrickshotActive ? (wrappedPredictedPos - currentPos).normalized : shootPoint.up;
-
         BulletProjectile bullet = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPoint.position, shootPoint.rotation);
-        bullet.Setup(BulletProjectile.BulletOwner.ENEMY, aimDir);
+        bullet.Setup(BulletProjectile.BulletOwner.ENEMY, shootPoint.up);
         shootTimer = shootCooldown;
     }
 

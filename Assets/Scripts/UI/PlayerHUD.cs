@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -12,9 +13,20 @@ public class PlayerHUD : UIComponent
     [SerializeField] private TextMeshProUGUI currentWaveText;
     [SerializeField] private TextMeshProUGUI currentStageText;
 
+    [SerializeField] private CanvasGroup warningBackgroundCanvasGroup;
+    [SerializeField] private TextMeshProUGUI warningWaveText;
+    [SerializeField] private TextMeshProUGUI traderText;
+
+    [SerializeField] private CanvasGroup stageAnnouncementCanvasGroup;
+    [SerializeField] private TextMeshProUGUI stageAnnouncementText;
+
     public override void SetupUI()
     {
-        
+        warningWaveText.enabled = false;
+        traderText.enabled = false;
+        stageAnnouncementCanvasGroup.alpha = 0f;
+        warningBackgroundCanvasGroup.alpha = 0f;
+        stageAnnouncementCanvasGroup.alpha = 0f;
     }
 
     public override void Show(bool showUI = true)
@@ -46,6 +58,55 @@ public class PlayerHUD : UIComponent
         string highscoreMessage = TextHandler.GetText("highscoreText", "player_hud");
         highscoreMessage = highscoreMessage.Replace("%highscore%", currentHighscore.ToString("N0"));
         highscoreText.text = highscoreMessage;
+    }
+
+    public IEnumerator ShowStageStartAnnouncement(int stage)
+    {
+        string stageStartMessage = TextHandler.GetText("stageStartText", "player_hud");
+        stageAnnouncementText.text = stageStartMessage.Replace("%stage%", stage.ToString("N0"));
+        yield return new WaitForSeconds(1.5f);
+        stageAnnouncementCanvasGroup.alpha = 1f;
+        yield return new WaitForSeconds(2f);
+        stageAnnouncementCanvasGroup.alpha = 0f;
+    }
+
+    public IEnumerator ShowWaveIncomingWarning(bool isShopAvailable)
+    {
+        const int FLASHES = 6;
+        float flashDuration = 0.5f;
+
+        for(int i = 0; i < FLASHES; i++)
+        {
+            if(isShopAvailable)
+            {
+                traderText.enabled = true;
+            }
+
+            warningWaveText.enabled = true;
+
+            yield return StartCoroutine(LerpAlpha(warningBackgroundCanvasGroup, 0f, 0.1f, flashDuration / 2));
+
+            warningWaveText.enabled = false; 
+            
+            if(isShopAvailable)
+            {
+                traderText.enabled = false;
+            }
+
+            yield return StartCoroutine(LerpAlpha(warningBackgroundCanvasGroup, 0.1f, 0f, flashDuration / 2));
+        }
+    }
+
+    private IEnumerator LerpAlpha(CanvasGroup canvasGroup, float start, float end, float duration)
+    {
+        float elapsed = 0f;
+
+        while(elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(start, end, elapsed / duration);
+            yield return null;
+        }
     }
 
     public void UpdateCurrentWave(int currentWave, int maxWave)

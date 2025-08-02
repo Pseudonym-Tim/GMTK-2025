@@ -60,8 +60,8 @@ MonoBehaviour:
   shootCooldown: 1.5
   detectionRange: 15
   predictionLeadTime: 0.5
-  avoidanceRange: 1
-  avoidanceStrength: 1
+  avoidanceRange: 2
+  avoidanceStrength: 5
   trickshotChance: 0.25
   trickshotCooldown: 5
   trickshotDuration: 1.5

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class ShopEntryUI : UIComponent
 {
-    private const float INFO_PANEL_OFFSET = 50f;
+    private const float INFO_PANEL_OFFSET = 25f;
 
     public TextMeshProUGUI nameText;
     public Image iconImage;

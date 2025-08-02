@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a10e14bbd1d5b1a49bf96ebf94c19600, type: 3}
-  m_Name: NewShopItem
+  m_Name: TestShopItem2
   m_EditorClassIdentifier: 
-  itemName: 
-  icon: {fileID: 0}
-  description: 
-  scaleWithPoints: 0
-  costPercentage: 0.25
+  itemName: TEST ITEM 2
+  icon: {fileID: 102650676, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  description: This is a test of the shop item!
+  scaleWithPoints: 1
+  costPercentage: 0.5
   baseCost: 100
   minCost: 1

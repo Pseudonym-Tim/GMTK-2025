@@ -17,9 +17,11 @@ public class ShopUI : UIComponent
     private List<ShopEntryUI> shopEntryUIList = new List<ShopEntryUI>();
     private int selectedIndex;
     private ShopManager shopManager;
+    private FadeUI fadeUI;
 
     public override void SetupUI()
     {
+        fadeUI = UIManager.GetUIComponent<FadeUI>();
         shopManager = FindFirstObjectByType<ShopManager>();
         Show(false);
     }
@@ -31,9 +33,14 @@ public class ShopUI : UIComponent
 
         if(showUI)
         {
+            fadeUI.FadeIn();
             AnimationRoot.localScale = Vector3.zero;
             AnimationRoot.localRotation = Quaternion.Euler(0f, 0f, 0f);
             StartCoroutine(AnimateTransformOpen(0.5f));
+        }
+        else
+        {
+            fadeUI.FadeOut();
         }
     }
 
@@ -52,7 +59,7 @@ public class ShopUI : UIComponent
         {
             SelectNext();
         }
-        else if(InputManager.IsButtonPressed("SelectOption"))
+        else if(InputManager.IsButtonPressed("SelectOption") && !fadeUI.IsFading)
         {
             shopManager.PurchaseItem(selectedIndex);
         }
@@ -81,7 +88,7 @@ public class ShopUI : UIComponent
 
     public void UpdateShopMessage(string messageID)
     {
-        string scoreMessage = TextHandler.GetText(messageID, "player_hud");
+        string scoreMessage = TextHandler.GetText(messageID, "shop_ui");
         shopMessageText.text = scoreMessage;
     }
 

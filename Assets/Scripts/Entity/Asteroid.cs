@@ -20,14 +20,14 @@ public class Asteroid : Entity, IScreenWrappable
     [SerializeField] private int minWrapCount = 1;
     [SerializeField] private int maxWrapCount = 3;
 
-    private Rigidbody2D playerRigidbody2D;
+    private Rigidbody2D asteroidRigidbody2D;
     private int maximumWrapCount = 0;
     private int currentHealth;
     private BulletProjectile lastDamageSource;
 
     protected override void OnEntityAwake()
     {
-        playerRigidbody2D = GetComponent<Rigidbody2D>();
+        asteroidRigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     public override void OnEntitySpawn()
@@ -45,25 +45,64 @@ public class Asteroid : Entity, IScreenWrappable
         // Set drift...
         Vector2 driftDirection = Random.insideUnitCircle.normalized;
         float driftSpeed = Random.Range(minDriftSpeed, maxDriftSpeed);
-        playerRigidbody2D.linearVelocity = driftDirection * driftSpeed;
+        asteroidRigidbody2D.linearVelocity = driftDirection * driftSpeed;
 
         // Set rotation speed...
         float rotationSpeed = Random.Range(minRotationSpeed, maxRotationSpeed);
-        playerRigidbody2D.angularVelocity = rotationSpeed;
+        asteroidRigidbody2D.angularVelocity = rotationSpeed;
     }
 
     protected override void OnEntityCollision2D(Collision2D collision2D)
     {
         Collider2D collider2D = collision2D.contacts[0].collider;
 
-        Player playerEntity = collider2D.GetComponentInParent<Player>();
+        Player player = collision2D.gameObject.GetComponent<Player>();
+
+        if(player != null)
+        {
+            player.TakeDamage(1);
+            TakeDamage(1);
+
+            Vector2 knockbackDir = (player.CenterOfMass - CenterOfMass).normalized;
+
+            Rigidbody2D playerRigidbody2D = player.GetComponent<Rigidbody2D>();
+
+            float knockbackForceEnemy = 5f;
+            float knockbackForcePlayer = 5f;
+
+            asteroidRigidbody2D.linearVelocity = -knockbackDir * knockbackForceEnemy;
+            playerRigidbody2D.linearVelocity = knockbackDir * knockbackForcePlayer;
+        }
+
+        Enemy otherEnemy = collision2D.gameObject.GetComponent<Enemy>();
+
+        if(otherEnemy != null && otherEnemy != this)
+        {
+            otherEnemy.TakeDamage(1);
+            TakeDamage(1);
+
+            Vector2 knockbackDir = (otherEnemy.CenterOfMass - CenterOfMass).normalized;
+
+            Rigidbody2D otherEnemyRigidbody2D = otherEnemy.GetComponent<Rigidbody2D>();
+
+            float knockbackForceThisEnemy = 5f;
+            float knockbackForceOtherEnemy = 5f;
+
+            asteroidRigidbody2D.linearVelocity = -knockbackDir * knockbackForceThisEnemy;
+            otherEnemyRigidbody2D.linearVelocity = knockbackDir * knockbackForceOtherEnemy;
+        }
+
+        //OnDeath();
+        TakeDamage();
+
+        /*Player playerEntity = collider2D.GetComponentInParent<Player>();
         playerEntity?.TakeDamage();
 
         Enemy enemyEntity = collider2D.GetComponentInParent<Enemy>();
         enemyEntity?.TakeDamage();
 
         ScreenwrapManager.Unregister(this);
-        DestroyEntity();
+        DestroyEntity();*/
     }
 
     public void TakeDamage(int damageToTake = 1, BulletProjectile bulletProjectile = null)

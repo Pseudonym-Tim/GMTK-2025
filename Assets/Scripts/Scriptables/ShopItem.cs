@@ -32,5 +32,6 @@ public class ShopItem : ScriptableObject
     public void Apply()
     {
         // TODO: Implement the actual effect of this item/upgrade/weapon...
+        Debug.Log("Use shop item!");
     }
 }

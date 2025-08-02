@@ -27,6 +27,7 @@ public class ShopManager : Singleton<ShopManager>
         shopUI.Show(true);
         shopUI.UpdateRemainingPoints(scoreManager.CurrentScore);
         shopUI.DisplayShopItems(currentItems);
+        shopUI.UpdateShopMessage("shopIntroductionText");
     }
 
     private void GenerateShopItems()
@@ -60,14 +61,14 @@ public class ShopManager : Singleton<ShopManager>
 
             shopUI.UpdateRemainingPoints(scoreManager.CurrentScore);
             shopUI.UpdateShopItemCostText(index, TextHandler.GetText("shopInfoBoughtText", "shop_ui"));
-            shopUI.UpdateShopMessage(TextHandler.GetText("shopPurchaseSuccessText", "shop_ui"));
+            shopUI.UpdateShopMessage("shopPurchaseSuccessText");
 
             shopUI.IsInteractionEnabled = false;
             StartCoroutine(CloseStoreAfterDelay(2f));
         }
         else
         {
-            shopUI.UpdateShopMessage(TextHandler.GetText("shopNotEnoughPoints", "shop_ui"));
+            shopUI.UpdateShopMessage("shopNotEnoughPoints");
         }
     }
 

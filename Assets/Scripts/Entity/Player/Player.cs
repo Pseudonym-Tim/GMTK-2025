@@ -29,6 +29,7 @@ public class Player : Entity, IScreenWrappable
     private float targetRotation;
     private float shootTimer = 0f;
     private int currentHealth = 0;
+    private bool isInvulnerable = false;
 
     protected override void OnEntityAwake()
     {
@@ -51,6 +52,11 @@ public class Player : Entity, IScreenWrappable
 
     protected override void OnEntityUpdate()
     {
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F12))
+        {
+            isInvulnerable = !isInvulnerable;
+        }
+
         if(!PlayerInput.InputEnabled) { return; }
 
         // Turn ship...
@@ -78,6 +84,8 @@ public class Player : Entity, IScreenWrappable
 
     public void TakeDamage(int damageToTake = 1)
     {
+        if(isInvulnerable) { return; }
+
         currentHealth -= damageToTake;
         if(currentHealth < 0) { currentHealth = 0; }
 

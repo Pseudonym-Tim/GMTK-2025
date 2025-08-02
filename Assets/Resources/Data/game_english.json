@@ -5,10 +5,12 @@
         "currentHealthText": "<color=#ffffff><u>CURRENT HEALTH:</u>%healthAmount%</color>",
         "pointsAwardText": "<color=#ffffff>+%pointAmount%</color>",
         "currentWaveText": "<color=#ffffff><u>WAVE:</u>%currentWave%/%maxWave%</color>",
-        "currentStageText": "<color=#ffffff><u>CURRENT STAGE:</u>%currentStage%</color>"
+        "currentStageText": "<color=#ffffff><u>CURRENT STAGE:</u>%currentStage%</color>",
+        "stageStartText": "<color=#ffffff>STAGE %stage%</color>"
     },
     "shop_ui": {
         "shopPointsText": "<color=#ffffff><u>POINTS REMAINING:</u>%currentPoints%</color>",
+        "shopIntroductionText": "<color=#ffffff>WELCOME! CHOOSE AN ITEM, UPGRADE, OR WEAPON!</color>",
         "shopPurchaseSuccessText": "<color=#ffffff>THANKS FOR THE PURCHASE, GOOD LUCK OUT THERE!</color>",
         "shopInfoBoughtText": "<color=#ffffff>SOLD!</color>",
         "shopNotEnoughPoints": "<color=#ffffff>WHAT DO YOU THINK THIS IS, A CHARITY? BUY SOMETHING OR GET LOST!</color>"

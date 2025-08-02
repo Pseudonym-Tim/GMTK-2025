@@ -166,6 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013afd5bd4f91d743880c970ff473d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 3
+  pointsToAward: 300
   minDriftSpeed: 0.5
   maxDriftSpeed: 1.5
   minRotationSpeed: 10
@@ -177,8 +179,8 @@ MonoBehaviour:
   - {fileID: -713850085, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
   wrapBoundsSize: {x: 1, y: 1}
   wrapBoundsOffset: {x: 0, y: 0}
-  minWrapCount: 0
-  maxWrapCount: 3
+  minWrapCount: 100
+  maxWrapCount: 100
 --- !u!114 &1956353928005663079
 MonoBehaviour:
   m_ObjectHideFlags: 0
