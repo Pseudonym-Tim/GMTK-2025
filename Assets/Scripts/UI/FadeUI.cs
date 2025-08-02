@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class FadeUI : UIComponent
 {
-    private const float DEFAULT_FADE_TIME = 1f;
+    public const float DEFAULT_FADE_TIME = 1f;
 
     public static event Action OnFadeInComplete;
     public static event Action OnFadeOutComplete;

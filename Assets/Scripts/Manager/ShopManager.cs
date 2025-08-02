@@ -64,7 +64,8 @@ public class ShopManager : Singleton<ShopManager>
             shopUI.UpdateShopMessage("shopPurchaseSuccessText");
 
             shopUI.IsInteractionEnabled = false;
-            StartCoroutine(CloseStoreAfterDelay(2f));
+            FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
+            StartCoroutine(CloseStoreAfterDelay(FadeUI.DEFAULT_FADE_TIME));
         }
         else
         {
