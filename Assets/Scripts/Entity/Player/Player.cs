@@ -52,7 +52,7 @@ public class Player : Entity, IScreenWrappable
 
     protected override void OnEntityUpdate()
     {
-        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F12))
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab) && Input.GetKeyDown(KeyCode.F12))
         {
             isInvulnerable = !isInvulnerable;
         }
