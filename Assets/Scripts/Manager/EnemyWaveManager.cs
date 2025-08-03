@@ -25,11 +25,14 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
     private int lastWaveCount;
     private LevelManager levelManager;
     private PlayerHUD playerHUD;
-    private ShopManager shopManager;
+    private ShopManager shopManager; 
+    private bool shopShownThisWave = false;
+    private FadeUI fadeUI;
 
     private void Awake()
     {
         playerHUD = UIManager.GetUIComponent<PlayerHUD>();
+        fadeUI = UIManager.GetUIComponent<FadeUI>();
         shopManager = FindFirstObjectByType<ShopManager>();
         levelManager = FindFirstObjectByType<LevelManager>();
     }
@@ -66,27 +69,25 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         }
     }
 
+    public void OnShopSelectionComplete()
+    {
+        if(currentWave >= wavesPerStage)
+        {
+            currentStage++;
+            SetupStage();
+        }
+        else
+        {
+            StartNextWave();
+        }
+    }
+
     private void StartNextWave()
     {
         currentWave++;
-
-        playerHUD.UpdateCurrentWave(currentWave, wavesPerStage);
         playerHUD.UpdateCurrentStage(currentStage);
-
-        if(currentWave > wavesPerStage)
-        {
-            shopManager.OpenShop();
-            currentStage++;
-            SetupStage();
-            return;
-        }
-
+        playerHUD.UpdateCurrentWave(currentWave, wavesPerStage);
         StartCoroutine(WaveCoroutine());
-    }
-
-    public void OnShopSelectionComplete()
-    {
-        StartNextWave();
     }
 
     private IEnumerator WaveCoroutine()
@@ -115,10 +116,9 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         // TODO: Might want to check if all are not alive instead, so currentHealth <= 0 or something...
         yield return new WaitUntil(() => levelManager.GetEntities<Enemy>().Count == 0);
 
-        // Open shop only after completing every 5th wave...
+        // Open shop only after completing every specific wave...
         if(currentWave % shopEveryWave == 0)
         {
-            FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
             yield return fadeUI.FadeOut();
             shopManager.OpenShop();
         }

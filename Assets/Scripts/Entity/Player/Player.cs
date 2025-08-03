@@ -119,11 +119,9 @@ public class Player : Entity, IScreenWrappable
 
     public void OnDeath()
     {
+        TriggerGameOver();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();
-
-        const int GAMEOVER_DELAY = 1;
-        Invoke(nameof(TriggerGameOver), GAMEOVER_DELAY);
     }
 
     public void OnScreenwrap()
@@ -140,6 +138,7 @@ public class Player : Entity, IScreenWrappable
         int nearMissCount = PlayerStatistics.NearMissCount;
         int wavesComplete = PlayerStatistics.WavesComplete;
         int stagesComplete = PlayerStatistics.StagesComplete;
+
         gameOverUI.InitStats(totalKills, recursionCount, nearMissCount, wavesComplete, stagesComplete);
 
         gameOverUI.Show(true);

@@ -28,10 +28,8 @@ public class GameOverUI : UIComponent
         public string textKey;
         public string placeholder;
         public TextMeshProUGUI statText;
-        [HideInInspector]
-        public int value;
-        [HideInInspector]
-        public string template;
+        [HideInInspector] public int value;
+        [HideInInspector] public string template;
     }
 
     [System.Serializable]
@@ -70,13 +68,13 @@ public class GameOverUI : UIComponent
         scoreManager = FindFirstObjectByType<ScoreManager>();
         headerRectTransform = destroyedHeaderImage.rectTransform;
         headerInitialPosition = headerRectTransform.localPosition;
-        newHighscoreText.gameObject.SetActive(false);
+        newHighscoreText.enabled = false;
 
         for(int i = 0; i < statReports.Length; i++)
         {
             StatReport report = statReports[i];
             report.template = TextHandler.GetText(report.textKey, "gameover_ui");
-            report.statText.gameObject.SetActive(false);
+            report.statText.enabled = false;
         }
 
         CacheOriginalColors();
