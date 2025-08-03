@@ -26,6 +26,9 @@ public class LevelManager : Singleton<LevelManager>
         // TODO: Ideally, spawn the player after a short cutscene or intro sequence?
         Player playerEntity = (Player)SpawnEntity("player_spaceship", Vector2.zero);
 
+        MusicManager musicManager = FindFirstObjectByType<MusicManager>();
+        musicManager.PlayTrack("star_carpet", false);
+
         enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
         enemyWaveManager.Setup();
     }

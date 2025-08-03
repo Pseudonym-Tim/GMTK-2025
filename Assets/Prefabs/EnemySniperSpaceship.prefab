@@ -62,7 +62,7 @@ MonoBehaviour:
   shootPoint: {fileID: 1165447714222194447}
   shootCooldown: 1.5
   detectionRange: 10
-  predictionLeadTime: 1
+  predictionLeadTime: 0.5
   minimumChargeTime: 1
 --- !u!114 &1772455265814580135
 MonoBehaviour:

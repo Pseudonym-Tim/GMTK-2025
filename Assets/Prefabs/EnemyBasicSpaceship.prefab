@@ -54,14 +54,14 @@ MonoBehaviour:
   wrapBoundsOffset: {x: 0, y: 0}
   rotateSpeed: 50
   moveAcceleration: 5
-  moveDeceleration: 2.5
+  moveDeceleration: 5
   moveSpeed: 3
   wanderChangeInterval: 2
   wanderRange: 5
   shootPoint: {fileID: 5239606169895752225}
   shootCooldown: 1.5
   detectionRange: 10
-  predictionLeadTime: 1
+  predictionLeadTime: 0.5
 --- !u!114 &217014101697295884
 MonoBehaviour:
   m_ObjectHideFlags: 0

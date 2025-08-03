@@ -91,13 +91,10 @@ MonoBehaviour:
   shotCount: 3
   shootCooldown: 1.5
   detectionRange: 10
-  predictionLeadTime: 1
+  predictionLeadTime: 0.5
   spreadAngle: 45
   avoidanceRange: 3
   avoidanceStrength: 0.5
-  trickshotChance: 0.1
-  trickshotCooldown: 5
-  trickshotDuration: 1
 --- !u!114 &5127482302683828448
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1115,7 +1115,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c99218fef1c824b9b73c8482f78dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicDatabase: []
+  musicDatabase:
+  - trackName: Star Carpet
+    trackID: star_carpet
+    audioClip: {fileID: 8300000, guid: 4b16f84eef7584b4facd58d85192b95f, type: 3}
+    musicAudioSource: {fileID: 0}
+    volume: 0.5
   masterMixerGroup: {fileID: 24300002, guid: 144e5b4c29c372f4996985d8c8e95943, type: 2}
 --- !u!1 &374569952
 GameObject:
@@ -3460,8 +3465,8 @@ MonoBehaviour:
   gridHeight: 15
   spacing: 2
   renderLayer: -1
-  animationMinDelay: 0.125
-  animationMaxDelay: 0.125
+  animationMinDelay: 0.05
+  animationMaxDelay: 0.05
   animationChancePerTile: 1
   minTilesAnimate: 15
   maxTilesAnimate: 15
@@ -4982,7 +4987,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675186767}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -6472,8 +6477,6 @@ MonoBehaviour:
   menuOptions:
   - backgroundImage: {fileID: 1038564251}
     optionText: {fileID: 1737403741}
-  - backgroundImage: {fileID: 0}
-    optionText: {fileID: 0}
   - backgroundImage: {fileID: 33253645}
     optionText: {fileID: 1866581655}
 --- !u!1 &2122386228

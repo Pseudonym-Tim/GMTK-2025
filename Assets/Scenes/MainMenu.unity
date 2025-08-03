@@ -660,6 +660,7 @@ GameObject:
   - component: {fileID: 706009511}
   - component: {fileID: 706009510}
   - component: {fileID: 706009509}
+  - component: {fileID: 706009512}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -753,6 +754,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &706009512
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706009508}
+  m_Enabled: 1
 --- !u!1 &720585716
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,7 +881,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c99218fef1c824b9b73c8482f78dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicDatabase: []
+  musicDatabase:
+  - trackName: Star Carpet
+    trackID: star_carpet
+    audioClip: {fileID: 8300000, guid: 4b16f84eef7584b4facd58d85192b95f, type: 3}
+    musicAudioSource: {fileID: 0}
+    volume: 0.5
+  - trackName: Star Carpet Pitched Down
+    trackID: star_carpet_pitch_down
+    audioClip: {fileID: 8300000, guid: c69f1048d73622540b511e764ccf87e9, type: 3}
+    musicAudioSource: {fileID: 0}
+    volume: 0.5
   masterMixerGroup: {fileID: 24300002, guid: 144e5b4c29c372f4996985d8c8e95943, type: 2}
 --- !u!1 &729211845
 GameObject:

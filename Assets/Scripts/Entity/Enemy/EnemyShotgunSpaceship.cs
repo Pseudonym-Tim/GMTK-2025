@@ -24,14 +24,6 @@ public class EnemyShotgunSpaceship : Enemy
     [SerializeField] private float avoidanceRange = 3f;
     [SerializeField] private float avoidanceStrength = 0.5f;
 
-    [Header("Trickshot")]
-    [SerializeField] private float trickshotChance = 0.1f;
-    [SerializeField] private float trickshotCooldown = 5f;
-    [SerializeField] private float trickshotDuration = 1f;
-
-    private bool isTrickshotActive;
-    private float trickshotTimer;
-    private float trickshotCooldownTimer;
     private float shootTimer;
     private Rigidbody2D playerRigidbody2D;
 
@@ -45,9 +37,6 @@ public class EnemyShotgunSpaceship : Enemy
         base.OnEntitySpawn();
         shootTimer = Random.Range(0f, shootCooldown);
         playerRigidbody2D = playerEntity != null ? playerEntity.GetComponent<Rigidbody2D>() : null;
-        trickshotCooldownTimer = Random.Range(0f, trickshotCooldown);
-        trickshotTimer = 0f;
-        isTrickshotActive = false;
     }
 
     private void FixedUpdate()
@@ -57,64 +46,26 @@ public class EnemyShotgunSpaceship : Enemy
             return;
         }
 
-        trickshotCooldownTimer -= Time.fixedDeltaTime;
-
-        if(!isTrickshotActive)
-        {
-            if(trickshotCooldownTimer <= 0f && Random.value < trickshotChance * Time.fixedDeltaTime)
-            {
-                isTrickshotActive = true;
-                trickshotTimer = trickshotDuration;
-                trickshotCooldownTimer = trickshotDuration + trickshotCooldown;
-            }
-        }
-        else
-        {
-            trickshotTimer -= Time.fixedDeltaTime;
-
-            if(trickshotTimer <= 0f)
-            {
-                isTrickshotActive = false;
-            }
-        }
-
         Vector2 currentPos = EntityPosition;
         Vector2 realTargetPos = playerEntity.CenterOfMass;
         Vector2 velocity = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
         Vector2 predictedPos = realTargetPos + velocity * predictionLeadTime;
-        Vector2 wrappedPredictedPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, predictedPos);
-
-        // Always face the wrapped predicted target
-        Vector2 rotationDir = (wrappedPredictedPos - currentPos).normalized;
+        //Vector2 wrappedPredictedPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, predictedPos);
+        Vector2 rotationDir = (predictedPos - currentPos).normalized;
         UpdateRotation(rotationDir);
 
-        if(isTrickshotActive)
-        {
-            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, Vector2.zero, moveDeceleration * Time.fixedDeltaTime);
-        }
-        else
-        {
-            Vector2 wrappedTargetPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, realTargetPos);
-            Vector2 movementDir = (wrappedTargetPos - currentPos).normalized;
-            UpdateMovement(movementDir);
-        }
+        Vector2 wrappedTargetPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, realTargetPos);
+        Vector2 movementDir = (wrappedTargetPos - currentPos).normalized;
+        UpdateMovement(movementDir);
 
         UpdateShooting(currentPos);
     }
 
     private void UpdateRotation(Vector2 direction)
     {
-        float desiredAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        float currentAngle = enemyRigidbody2D.rotation;
-        float delta = Mathf.DeltaAngle(currentAngle, desiredAngle);
-        float turn = Mathf.Sign(delta) * rotateSpeed * Time.fixedDeltaTime;
-
-        if(Mathf.Abs(turn) > Mathf.Abs(delta))
-        {
-            turn = delta;
-        }
-
-        enemyRigidbody2D.MoveRotation(currentAngle + turn);
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        float newAngle = Mathf.LerpAngle(enemyRigidbody2D.rotation, targetAngle, rotateSpeed * Time.fixedDeltaTime);
+        enemyRigidbody2D.MoveRotation(newAngle);
     }
 
     private void UpdateMovement(Vector2 direction)
