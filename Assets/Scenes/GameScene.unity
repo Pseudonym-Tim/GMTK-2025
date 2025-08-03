@@ -2387,11 +2387,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a00b6fbbb0c9b848b5a1ade6ea585f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavesPerStage: 2
-  initialEnemyCount: 1
+  wavesPerStage: 5
+  initialEnemyCount: 3
   extraEnemiesMin: 1
-  extraEnemiesMax: 1
-  shopEveryWave: 2
+  extraEnemiesMax: 3
+  shopEveryWave: 5
   enemyEntityIDList:
   - enemy_spaceship
   spawnInterval: 2

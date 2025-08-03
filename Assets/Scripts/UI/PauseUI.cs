@@ -21,6 +21,8 @@ public class PauseUI : UIComponent
     private Color[] originalTextColors;
     private Vector3 initialLogoPosition;
     private FadeUI fadeUI;
+    private GameOverUI gameOverUI;
+    private ShopUI shopUI;
 
     [System.Serializable]
     public class MenuOption
@@ -31,8 +33,8 @@ public class PauseUI : UIComponent
 
     public override void SetupUI()
     {
-        fadeUI = UIManager.GetUIComponent<FadeUI>();
-        fadeUI.FadeIn();
+        gameOverUI = UIManager.GetUIComponent<GameOverUI>();
+        shopUI = UIManager.GetUIComponent<ShopUI>();
         initialLogoPosition = logoImage.rectTransform.localPosition;
         CacheOriginalColors();
         HighlightOption(selectedIndex);
@@ -58,6 +60,12 @@ public class PauseUI : UIComponent
 
     private void Update()
     {
+        // Prevent pause toggle if gameover or shop UI is active...
+        if(gameOverUI.IsShown || shopUI.IsShown)
+        {
+            return;
+        }
+
         if(InputManager.IsButtonPressed("Pause"))
         {
             Show(!UICanvas.enabled);
