@@ -8,18 +8,29 @@ public class BurstShotWeaponUpgrade : WeaponUpgrade
     [SerializeField] private int burstCount = 3;
     [SerializeField] private float burstInterval = 0.1f;
 
+    private bool isBursting;
+
     public override void Shoot(Player playerEntity)
     {
+        if(isBursting)
+        {
+            return;
+        }
+
         playerEntity.StartCoroutine(FireBurst(playerEntity));
     }
 
     private IEnumerator FireBurst(Player player)
     {
+        isBursting = true;
+
         for(int i = 0; i < burstCount; i++)
         {
             SpawnBullet(player);
             yield return new WaitForSeconds(burstInterval);
         }
+
+        isBursting = false;
     }
 
     private void SpawnBullet(Player player)
