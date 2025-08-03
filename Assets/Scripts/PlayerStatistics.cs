@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerStatistics : MonoBehaviour
 {
-    public int TotalKills { get; private set; } = 0;
+    public int TotalKills { get; private set; } = 55;
     public int RecursionCount { get; private set; } = 0;
     public int NearMissCount { get; private set; } = 0;
     public int WavesComplete { get; private set; } = 0;

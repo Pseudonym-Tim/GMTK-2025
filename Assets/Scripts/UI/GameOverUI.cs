@@ -132,6 +132,7 @@ public class GameOverUI : UIComponent
         for(int i = 0; i < statReports.Length; i++)
         {
             StatReport report = statReports[i];
+            report.statText.text = report.template.Replace("%" + report.placeholder + "%", "0");
             report.statText.enabled = true;
             yield return CountUpStat(report, reportCountDuration);
 
@@ -296,9 +297,6 @@ public class GameOverUI : UIComponent
     private IEnumerator CountUpStat(StatReport report, float duration)
     {
         float elapsed = 0.0f;
-
-        // ensure we always enter the coroutine on the next frame
-        yield return null;
 
         if(duration <= 0.0f)
         {
