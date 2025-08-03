@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -110,11 +111,20 @@ public class Enemy : Entity, IScreenWrappable
             playerEntity?.PlayerStatistics.RegisterKill();
         }
 
-        sfxManager.Play2DSound("explosion");
+        SpawnExplosion();
 
         CheckAwardPoints();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();
+    }
+
+    private void SpawnExplosion()
+    {
+        GameObject explosionPrefab = (GameObject)Resources.Load("Prefabs/Explosion");
+        Quaternion randomRot = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+        Instantiate(explosionPrefab, CenterOfMass, randomRot);
+        playerEntity?.PlayerCamera.Shake(1f, 0.5f / 2);
+        sfxManager.Play2DSound("explosion");
     }
 
     private void CheckAwardPoints()

@@ -111,11 +111,22 @@ public class Asteroid : Entity, IScreenWrappable
 
     private void OnDeath()
     {
-        sfxManager.Play2DSound("explosion");
+        SpawnExplosion();
 
         CheckAwardPoints();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();
+    }
+
+    private void SpawnExplosion()
+    {
+        GameObject explosionPrefab = (GameObject)Resources.Load("Prefabs/Explosion");
+        Quaternion randomRot = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+        Instantiate(explosionPrefab, CenterOfMass, randomRot);
+        LevelManager levelManager = FindFirstObjectByType<LevelManager>();
+        Player playerEntity = levelManager.GetEntity<Player>();
+        playerEntity?.PlayerCamera.Shake(1f, 0.5f / 2);
+        sfxManager.Play2DSound("explosion");
     }
 
     public void OnScreenwrap()
