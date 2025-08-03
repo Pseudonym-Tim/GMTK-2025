@@ -225,13 +225,13 @@ public class GameOverUI : UIComponent
             return;
         }
 
-        if(InputManager.IsButtonPressed("NavigateDown") || InputManager.IsButtonPressed("NavigateUp"))
-        {
-            NavigateOption(-1);
-        }
-        else if(InputManager.IsButtonPressed("NavigateLeft") || InputManager.IsButtonPressed("NavigateRight"))
+        if(InputManager.IsButtonPressed("NavigateDown") || InputManager.IsButtonPressed("NavigateLeft"))
         {
             NavigateOption(1);
+        }
+        else if(InputManager.IsButtonPressed("NavigateUp") || InputManager.IsButtonPressed("NavigateRight"))
+        {
+            NavigateOption(-1);
         }
 
         if(InputManager.IsButtonPressed("SelectOption"))
@@ -333,7 +333,6 @@ public class GameOverUI : UIComponent
 
         headerRectTransform.localPosition = headerInitialPosition;
     }
-
 
     private IEnumerator CountUpStat(StatReport report, float duration, int endValue)
     {

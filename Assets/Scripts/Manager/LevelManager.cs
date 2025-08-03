@@ -161,7 +161,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public void RemoveEntity(Entity entityToRemove, float removeTime = 0)
     {
-        if(LevelEntities.Contains(entityToRemove))
+        if(LevelEntities.Contains(entityToRemove) && entityToRemove != null)
         {
             entityToRemove.DestroyEntity(removeTime);
             LevelEntities.Remove(entityToRemove);
