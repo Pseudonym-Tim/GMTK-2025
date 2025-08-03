@@ -11,8 +11,9 @@ public class ShopEntryUI : UIComponent
     private const float INFO_PANEL_OFFSET = 25f;
 
     public TextMeshProUGUI nameText;
+    public Image containerImage;
     public Image iconImage;
-    public Image selectionOverlayImage;
+    public Sprite hoveredSprite;
 
     [Header("Info Panel")]
     public Transform infoPanel;
@@ -22,15 +23,16 @@ public class ShopEntryUI : UIComponent
     private Vector3 infoPanelDefaultPosition;
     private Vector3 infoPanelTargetPosition;
     private ShopItem currentShopItem;
+    private Sprite originalContainerSprite;
 
     public void Setup(ShopItem shopItem, bool isSelected)
     {
         currentShopItem = shopItem;
         nameText.text = shopItem.itemName;
         iconImage.sprite = shopItem.icon;
+        originalContainerSprite = containerImage.sprite;
         infoDescriptionText.text = shopItem.description;
         infoPanelCostText.text = shopItem.GetCost().ToString() + "$";
-        selectionOverlayImage.enabled = isSelected;
         infoPanelDefaultPosition = infoPanel.localPosition;
         infoPanelTargetPosition = infoPanelDefaultPosition + Vector3.up * INFO_PANEL_OFFSET;
         infoPanel.localScale = new Vector3(0f, 1f, 1f);
@@ -39,7 +41,7 @@ public class ShopEntryUI : UIComponent
 
     public void SetHovered(bool isHovered)
     {
-        selectionOverlayImage.enabled = isHovered;
+        containerImage.sprite = isHovered ? hoveredSprite : originalContainerSprite;
         StopAllCoroutines();
         StartCoroutine(AnimateInfoPanel(isHovered, 0.25f));
     }

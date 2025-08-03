@@ -888,9 +888,9 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 4b16f84eef7584b4facd58d85192b95f, type: 3}
     musicAudioSource: {fileID: 0}
     volume: 0.4
-  - trackName: Star Carpet Pitched Down
-    trackID: star_carpet_pitch_down
-    audioClip: {fileID: 8300000, guid: c69f1048d73622540b511e764ccf87e9, type: 3}
+  - trackName: Deep Space
+    trackID: deep_space
+    audioClip: {fileID: 8300000, guid: 6dafc18515ff40144ac2eaf8d2a78693, type: 3}
     musicAudioSource: {fileID: 0}
     volume: 0.4
   masterMixerGroup: {fileID: 24300002, guid: 144e5b4c29c372f4996985d8c8e95943, type: 2}
@@ -2073,8 +2073,6 @@ MonoBehaviour:
   menuOptions:
   - backgroundImage: {fileID: 1846762342}
     optionText: {fileID: 620376926}
-  - backgroundImage: {fileID: 836906392}
-    optionText: {fileID: 731553550}
   - backgroundImage: {fileID: 538818189}
     optionText: {fileID: 1182502572}
 --- !u!1 &1846762340

@@ -2302,11 +2302,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a00b6fbbb0c9b848b5a1ade6ea585f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavesPerStage: 5
-  initialEnemyCount: 5
+  wavesPerStage: 1
+  initialEnemyCount: 1
   extraEnemiesMin: 1
   extraEnemiesMax: 3
-  shopEveryWave: 5
+  shopEveryWave: 1
   enemyEntityIDList:
   - enemy_flanker_spaceship
   - enemy_basic_spaceship
@@ -2543,6 +2543,7 @@ GameObject:
   - component: {fileID: 1013006084}
   - component: {fileID: 1013006083}
   - component: {fileID: 1013006082}
+  - component: {fileID: 1013006085}
   m_Layer: 0
   m_Name: HeaderText
   m_TagString: Untagged
@@ -2682,6 +2683,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1013006080}
   m_CullTransparentMesh: 1
+--- !u!114 &1013006085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013006080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93873090972d0ec439ef017cfbaf1439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 0}
+  effectType: 0
+  effectIntensity: 3.75
+  effectSpeed: 7
 --- !u!1 &1016835565
 GameObject:
   m_ObjectHideFlags: 0

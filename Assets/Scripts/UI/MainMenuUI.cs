@@ -32,7 +32,7 @@ public class MainMenuUI : UIComponent
     public override void SetupUI()
     {
         MusicManager musicManager = FindFirstObjectByType<MusicManager>();
-        musicManager.PlayTrack("star_carpet_pitch_down", false);
+        musicManager.PlayTrack("deep_space", false);
         fadeUI = UIManager.GetUIComponent<FadeUI>();
         fadeUI.FadeIn();
         initialLogoPosition = logoImage.rectTransform.localPosition;

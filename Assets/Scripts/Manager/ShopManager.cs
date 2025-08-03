@@ -28,6 +28,15 @@ public class ShopManager : Singleton<ShopManager>
         shopUI.UpdateRemainingPoints(scoreManager.CurrentScore);
         shopUI.DisplayShopItems(currentItems);
         shopUI.UpdateShopMessage("shopIntroductionText");
+
+        LevelManager levelManager = FindFirstObjectByType<LevelManager>();
+        Player playerEntity = levelManager.GetEntity<Player>();
+
+        if(playerEntity != null)
+        {
+            playerEntity.SetInvulnerable(true);
+            playerEntity.Teleport(new Vector2(0, 99999));
+        }
     }
 
     private void GenerateShopItems()
@@ -86,6 +95,14 @@ public class ShopManager : Singleton<ShopManager>
         fadeUI.FadeIn();
         EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
         enemyWaveManager.OnShopSelectionComplete();
+
+        LevelManager levelManager = FindFirstObjectByType<LevelManager>();
+        Player playerEntity = levelManager.GetEntity<Player>();
+
+        if(playerEntity != null)
+        {
+            playerEntity.SetInvulnerable(false);
+        }
     }
 
     public IReadOnlyList<ShopItem> CurrentItems

@@ -229,6 +229,11 @@ public class Player : Entity, IScreenWrappable
         DestroyEntity();
     }
 
+    public void SetInvulnerable(bool invulnerable)
+    {
+        isInvulnerable = invulnerable;
+    }
+
     public void EquipWeaponUpgrade(WeaponUpgrade upgrade)
     {
         currentWeaponUpgrade = upgrade;
