@@ -34,6 +34,7 @@ public class PauseUI : UIComponent
 
     public override void SetupUI()
     {
+        fadeUI = UIManager.GetUIComponent<FadeUI>();
         gameOverUI = UIManager.GetUIComponent<GameOverUI>();
         shopUI = UIManager.GetUIComponent<ShopUI>();
         initialLogoPosition = logoImage.rectTransform.localPosition;
