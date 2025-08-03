@@ -59,34 +59,29 @@ public class EnemySniperSpaceship : Enemy
         }
 
         Vector2 currentPos = EntityPosition;
-        Vector2 realTargetPos = playerEntity.CenterOfMass;
-        Vector2 velocity = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
-        Vector2 predictedPos = realTargetPos + velocity * predictionLeadTime;
-        float distance = Vector2.Distance(currentPos, realTargetPos);
+        Vector2 realTarget = playerEntity.CenterOfMass;
+        Vector2 linearVel = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
+        Vector3 predicted3D = new Vector3(realTarget.x + linearVel.x * predictionLeadTime, realTarget.y + linearVel.y * predictionLeadTime, 0f);
+        Vector2 predictedPos = new Vector2(predicted3D.x, predicted3D.y);
 
-        Vector2 desiredVelocity;
+        float distance = Vector2.Distance(currentPos, realTarget);
+        bool shouldRetreat = distance <= retreatDistanceThreshold;
+        Vector2 desiredDir = (shouldRetreat ? currentPos - predictedPos : predictedPos - currentPos).normalized;
+        Vector2 desiredVel = desiredDir * moveSpeed;
 
-        if(distance < retreatDistanceThreshold)
+        if(Vector2.Dot(enemyRigidbody2D.linearVelocity, desiredVel) < desiredVel.sqrMagnitude)
         {
-            Vector2 fleeDir = (currentPos - realTargetPos).normalized;
-            desiredVelocity = fleeDir * moveSpeed;
-        }
-        else
-        {
-            desiredVelocity = wanderDirection * moveSpeed;
-        }
-
-        if(desiredVelocity.magnitude > 0.1f)
-        {
-            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVelocity, moveAcceleration * Time.fixedDeltaTime);
+            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVel, moveAcceleration * Time.fixedDeltaTime);
         }
         else
         {
             enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, Vector2.zero, moveDeceleration * Time.fixedDeltaTime);
         }
 
-        float angle = Mathf.Atan2(desiredVelocity.y, desiredVelocity.x) * Mathf.Rad2Deg - 90f;
-        enemyRigidbody2D.MoveRotation(Mathf.LerpAngle(enemyRigidbody2D.rotation, angle, rotateSpeed * Time.fixedDeltaTime));
+        Vector2 rotationDir = (predictedPos - currentPos).normalized;
+        float targetAngle = Mathf.Atan2(rotationDir.y, rotationDir.x) * Mathf.Rad2Deg - 90f;
+        float newAngle = Mathf.LerpAngle(enemyRigidbody2D.rotation, targetAngle, rotateSpeed * Time.fixedDeltaTime);
+        enemyRigidbody2D.MoveRotation(newAngle);
 
         shootTimer -= Time.fixedDeltaTime;
 
@@ -113,11 +108,11 @@ public class EnemySniperSpaceship : Enemy
 
         if(lockedTargetPos.HasValue)
         {
-            Vector2 dir = lockedTargetPos.Value - (Vector2)shootPoint.position;
+            /*Vector2 dir = lockedTargetPos.Value - (Vector2)shootPoint.position;
             float angleDeg = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            Quaternion rot = Quaternion.Euler(0f, 0f, angleDeg - 90f);
-            BulletProjectile bullet = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPoint.position, rot);
-            bullet.Setup(BulletProjectile.BulletOwner.ENEMY, dir.normalized);
+            Quaternion rot = Quaternion.Euler(0f, 0f, angleDeg - 90f);*/
+            BulletProjectile bullet = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPoint.position, shootPoint.rotation);
+            bullet.Setup(BulletProjectile.BulletOwner.ENEMY, shootPoint.up);
 
             sfxManager.Play2DSound("sniper_fire");
         }

@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  pointsToAward: 300
+  pointsToAward: 100
   minDriftSpeed: 0.5
   maxDriftSpeed: 1.5
   minRotationSpeed: 10

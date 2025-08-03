@@ -52,7 +52,7 @@ MonoBehaviour:
   pointsToAward: 150
   wrapBoundsSize: {x: 1.25, y: 1.25}
   wrapBoundsOffset: {x: 0, y: 0}
-  rotateSpeed: 5
+  rotateSpeed: 50
   moveAcceleration: 5
   moveDeceleration: 2.5
   moveSpeed: 3
@@ -77,7 +77,7 @@ MonoBehaviour:
   hullData:
     Type: 0
     Center: {x: 0, y: 0}
-    Size: {x: 0.5, y: 0.5}
+    Size: {x: 0.75, y: 0.75}
     Radius: 0.2
 --- !u!50 &9117798308484140012
 Rigidbody2D:

@@ -2400,8 +2400,8 @@ MonoBehaviour:
   - enemy_shotgun_spaceship
   - enemy_sniper_spaceship
   spawnInterval: 4
-  minAsteroids: 2
-  maxAsteroids: 4
+  minAsteroids: 3
+  maxAsteroids: 6
   waveStartDelay: 3
 --- !u!1 &810278555
 GameObject:

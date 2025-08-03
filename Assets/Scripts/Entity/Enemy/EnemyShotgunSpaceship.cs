@@ -84,8 +84,8 @@ public class EnemyShotgunSpaceship : Enemy
         Vector2 predictedPos = realTargetPos + velocity * predictionLeadTime;
         Vector2 wrappedPredictedPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, predictedPos);
 
-        Vector2 rotationDir = isTrickshotActive ? (wrappedPredictedPos - currentPos).normalized : (predictedPos - currentPos).normalized;
-
+        // Always face the wrapped predicted target
+        Vector2 rotationDir = (wrappedPredictedPos - currentPos).normalized;
         UpdateRotation(rotationDir);
 
         if(isTrickshotActive)

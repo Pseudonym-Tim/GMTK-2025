@@ -80,7 +80,7 @@ MonoBehaviour:
   hullData:
     Type: 0
     Center: {x: 0, y: 0}
-    Size: {x: 0.5, y: 0.5}
+    Size: {x: 0.75, y: 0.75}
     Radius: 0.2
 --- !u!50 &583353253351437586
 Rigidbody2D:
