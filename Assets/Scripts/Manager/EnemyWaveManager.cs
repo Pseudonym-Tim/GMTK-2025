@@ -48,6 +48,14 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
     {
         isGameOver = false;
         currentStage = 1;
+
+        Player player = levelManager.GetEntity<Player>();
+
+        if(player != null)
+        {
+            player.PlayerStatistics.RegisterStageComplete(currentStage);
+        }
+
         SetupStage();
     }
 
@@ -95,6 +103,14 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         if(currentWave >= wavesPerStage)
         {
             currentStage++;
+
+            Player player = levelManager.GetEntity<Player>();
+
+            if(player != null)
+            {
+                player.PlayerStatistics.RegisterStageComplete(currentStage);
+            }
+
             SetupStage();
         }
         else
@@ -148,6 +164,13 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         else
         {
             StartNextWave();
+        }
+
+        Player player = levelManager.GetEntity<Player>();
+
+        if(player != null)
+        {
+            player.PlayerStatistics.RegisterWaveComplete(currentWave);
         }
     }
 

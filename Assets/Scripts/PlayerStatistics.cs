@@ -15,6 +15,6 @@ public class PlayerStatistics : MonoBehaviour
     public void RegisterKill() => TotalKills++;
     public void RegisterRecursion() => RecursionCount++;
     public void RegisterNearMiss() => NearMissCount++;
-    public void RegisterWaveComplete() => WavesComplete++;
-    public void RegisterStageComplete() => StagesComplete++;
+    public void RegisterWaveComplete(int waveAmount) => WavesComplete = waveAmount;
+    public void RegisterStageComplete(int stageAmount) => StagesComplete = stageAmount;
 }

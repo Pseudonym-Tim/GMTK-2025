@@ -102,6 +102,11 @@ public class Enemy : Entity, IScreenWrappable
 
     protected virtual void OnDeath()
     {
+        if(lastDamageSource != null && lastDamageSource.Owner == BulletProjectile.BulletOwner.PLAYER)
+        {
+            playerEntity?.PlayerStatistics.RegisterKill();
+        }
+
         CheckAwardPoints();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();

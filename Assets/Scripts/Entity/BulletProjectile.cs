@@ -24,7 +24,10 @@ public class BulletProjectile : Entity, IScreenWrappable
     [SerializeField] private Sprite enemyBulletSprite;
 
     private float ignoreTimer = 0f;
-    private Rigidbody2D bulletRigidbody2D;
+    private Rigidbody2D bulletRigidbody2D; 
+    private bool hasRegisteredNearMiss = false;
+    private float nearMissCooldown = 0.5f;
+    private float nearMissTimer = 0f;
 
     protected override void OnEntityAwake()
     {
@@ -93,11 +96,56 @@ public class BulletProjectile : Entity, IScreenWrappable
             ScreenwrapManager.Unregister(this);
             DestroyEntity();
         }
+
+        CheckEnemyBulletNearMiss();
+    }
+
+    private void CheckEnemyBulletNearMiss()
+    {
+        if(Owner == BulletOwner.ENEMY && !hasRegisteredNearMiss)
+        {
+            const float CHECK_DISTANCE = 1.5f;
+            LevelManager levelManager = FindFirstObjectByType<LevelManager>();
+            Player playerEntity = levelManager.GetEntity<Player>();
+
+            if(playerEntity != null)
+            {
+                Vector2 rotatedOffset = Quaternion.Euler(0, 0, EntityEulerAngles.z) * hitBoxOffset;
+                Vector3 checkPos = EntityPosition + rotatedOffset;
+                float distance = Vector2.Distance(playerEntity.CenterOfMass, checkPos);
+
+                if(distance <= CHECK_DISTANCE)
+                {
+                    playerEntity.PlayerStatistics.RegisterNearMiss();
+                    hasRegisteredNearMiss = true;
+                    nearMissTimer = nearMissCooldown;
+                }
+            }
+        }
+
+        if(hasRegisteredNearMiss)
+        {
+            nearMissTimer -= Time.fixedDeltaTime;
+
+            if(nearMissTimer <= 0f)
+            {
+                hasRegisteredNearMiss = false;
+            }
+        }
     }
 
     public void OnScreenwrap()
     {
+        if(Owner == BulletOwner.PLAYER)
+        {
+            LevelManager levelManager = FindFirstObjectByType<LevelManager>();
+            Player player = levelManager.GetEntity<Player>();
 
+            if(player != null)
+            {
+                player.PlayerStatistics.RegisterRecursion();
+            }
+        }
     }
 
     protected override void OnDrawEntityGizmos()
