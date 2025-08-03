@@ -87,7 +87,7 @@ public class Player : Entity, IScreenWrappable
 
     private void UpdateShipRotation()
     {
-        float newTarget = 0f;
+        float newTarget = playerRigidbody2D.rotation;
 
         if(currentWeaponUpgrade != null && currentWeaponUpgrade.TryGetRotationLock(this, out float lockedRot))
         {
@@ -96,17 +96,14 @@ public class Player : Entity, IScreenWrappable
         else
         {
             float rotInput = 0f;
-
-            if(PlayerInput.IsButtonHeld("TurnLeft"))
+            if(Input.GetKey(KeyCode.LeftArrow))
             {
                 rotInput = 1f;
             }
-
-            if(PlayerInput.IsButtonHeld("TurnRight"))
+            else if(Input.GetKey(KeyCode.RightArrow))
             {
                 rotInput = -1f;
             }
-
             newTarget = playerRigidbody2D.rotation + rotInput * rotateSpeed;
         }
 
@@ -115,15 +112,32 @@ public class Player : Entity, IScreenWrappable
 
     private void FixedUpdate()
     {
-        // Smoothly rotate ship...
+        // Rotate the ship
         playerRigidbody2D.MoveRotation(targetRotation);
 
-        // Apply velocity...
-        Vector2 currentVelocity = playerRigidbody2D.linearVelocity;
-        bool isThrusting = PlayerInput.IsButtonHeld("Thrust");
-        Vector2 desiredVelocity = isThrusting ? transform.up * moveSpeed : Vector2.zero;
-        float rate = isThrusting ? moveAcceleration : moveDeceleration;
-        Vector2 newVelocity = Vector2.MoveTowards(currentVelocity, desiredVelocity, rate * Time.fixedDeltaTime);
+        // Build movement vector from WSAD
+        Vector3 inputVector = Vector2.zero;
+        if(Input.GetKey(KeyCode.W))
+        {
+            inputVector += transform.up;
+        }
+        if(Input.GetKey(KeyCode.S))
+        {
+            inputVector -= transform.up;
+        }
+        if(Input.GetKey(KeyCode.D))
+        {
+            inputVector += transform.right;
+        }
+        if(Input.GetKey(KeyCode.A))
+        {
+            inputVector -= transform.right;
+        }
+
+        // Calculate desired velocity and smooth it
+        Vector2 desiredVelocity = inputVector.normalized * moveSpeed;
+        float accelerationRate = inputVector != Vector3.zero ? moveAcceleration : moveDeceleration;
+        Vector2 newVelocity = Vector2.MoveTowards(playerRigidbody2D.linearVelocity, desiredVelocity, accelerationRate * Time.fixedDeltaTime);
         playerRigidbody2D.linearVelocity = newVelocity;
     }
 
@@ -165,7 +179,7 @@ public class Player : Entity, IScreenWrappable
     {
         shootTimer -= Time.deltaTime;
 
-        if(PlayerInput.IsButtonHeld("Shoot") && shootTimer <= 0f)
+        if((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.Space)) && shootTimer <= 0f)
         {
             Shoot();
             shootTimer = shootCooldown;
