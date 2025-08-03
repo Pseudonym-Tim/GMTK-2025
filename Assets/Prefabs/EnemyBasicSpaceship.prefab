@@ -52,16 +52,16 @@ MonoBehaviour:
   pointsToAward: 150
   wrapBoundsSize: {x: 1.25, y: 1.25}
   wrapBoundsOffset: {x: 0, y: 0}
-  rotateSpeed: 5
+  rotateSpeed: 50
   moveAcceleration: 5
-  moveDeceleration: 2.5
+  moveDeceleration: 5
   moveSpeed: 3
   wanderChangeInterval: 2
   wanderRange: 5
   shootPoint: {fileID: 5239606169895752225}
   shootCooldown: 1.5
   detectionRange: 10
-  predictionLeadTime: 1
+  predictionLeadTime: 0.5
 --- !u!114 &217014101697295884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
   hullData:
     Type: 0
     Center: {x: 0, y: 0}
-    Size: {x: 0.5, y: 0.5}
+    Size: {x: 0.75, y: 0.75}
     Radius: 0.2
 --- !u!50 &9117798308484140012
 Rigidbody2D:

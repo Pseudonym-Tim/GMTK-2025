@@ -12,8 +12,8 @@ public class InputManager : Singleton<InputManager>
 
     private void Awake()
     {
-        LockCursor(false);
-        ShowHardwareCursor(true);
+        LockCursor(true);
+        ShowHardwareCursor(false);
     }
 
     public static void EnableInput()

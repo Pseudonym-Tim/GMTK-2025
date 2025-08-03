@@ -49,10 +49,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  pointsToAward: 300
+  pointsToAward: 200
   wrapBoundsSize: {x: 1.25, y: 1.25}
   wrapBoundsOffset: {x: 0, y: 0}
-  rotateSpeed: 5
+  rotateSpeed: 50
   moveAcceleration: 5
   moveDeceleration: 2.5
   moveSpeed: 3
@@ -62,7 +62,7 @@ MonoBehaviour:
   shootPoint: {fileID: 1165447714222194447}
   shootCooldown: 1.5
   detectionRange: 10
-  predictionLeadTime: 1
+  predictionLeadTime: 0.5
   minimumChargeTime: 1
 --- !u!114 &1772455265814580135
 MonoBehaviour:
@@ -79,7 +79,7 @@ MonoBehaviour:
   hullData:
     Type: 0
     Center: {x: 0, y: -0.05}
-    Size: {x: 0.6, y: 0.6}
+    Size: {x: 0.7, y: 0.7}
     Radius: 0.2
 --- !u!50 &9047301232884363613
 Rigidbody2D:

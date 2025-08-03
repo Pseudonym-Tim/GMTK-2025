@@ -295,7 +295,8 @@ public class GameOverUI : UIComponent
         switch(optionIndex)
         {
             case 0:
-                GameManager.StartGame();
+                SceneManager.LoadScene(1);
+                //GameManager.StartGame();
                 break;
             case 1:
                 SceneManager.LoadScene(0);
@@ -350,7 +351,7 @@ public class GameOverUI : UIComponent
         report.statText.text = report.template.Replace("%" + report.placeholder + "%", endValue.ToString());
     }
 
-    private IEnumerator CountUpwards(TextMeshProUGUI textField, int startValue, int endValue, float duration)
+    /*private IEnumerator CountUpwards(TextMeshProUGUI textField, int startValue, int endValue, float duration)
     {
         float elapsed = 0f;
 
@@ -364,7 +365,7 @@ public class GameOverUI : UIComponent
         }
 
         textField.text = endValue.ToString();
-    }
+    }*/
 
     private IEnumerator FlashNewHighscore()
     {

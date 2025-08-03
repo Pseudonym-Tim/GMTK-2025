@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -7,7 +8,8 @@ using UnityEngine.VFX;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Entity, IScreenWrappable
 {
-    public int maxHealth = 3;
+    public int maxHealth = 3; 
+    [SerializeField] private float invulnerabilityDuration = 1f;
 
     [Header("Movement")]
     [SerializeField] private float rotateSpeed = 10f;
@@ -127,13 +129,19 @@ public class Player : Entity, IScreenWrappable
 
     public void TakeDamage(int damageToTake = 1)
     {
-        if(isInvulnerable) { return; }
+        if(isInvulnerable)
+        {
+            return;
+        }
 
         currentHealth -= damageToTake;
-        if(currentHealth < 0) { currentHealth = 0; }
+
+        if(currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
 
         PlayerCamera.Shake(0.25f / 2, 0.025f);
-
         playerHUD.UpdatePlayerHP(currentHealth);
 
         if(currentHealth <= 0)
@@ -143,6 +151,14 @@ public class Player : Entity, IScreenWrappable
         }
 
         EntityHurtFlash.Setup(this);
+        StartCoroutine(InvulnerabilityCoroutine());
+    }
+
+    private IEnumerator InvulnerabilityCoroutine()
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(invulnerabilityDuration);
+        isInvulnerable = false;
     }
 
     private void UpdateShooting()
@@ -203,7 +219,7 @@ public class Player : Entity, IScreenWrappable
     {
         EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
         enemyWaveManager.StopWaveLogic();
-        TriggerGameOver();
+        OnTriggerGameOver();
 
         PlayerCamera.Shake(1f, 0.25f);
 
@@ -223,7 +239,7 @@ public class Player : Entity, IScreenWrappable
 
     }
 
-    public void TriggerGameOver()
+    public void OnTriggerGameOver()
     {
         GameOverUI gameOverUI = UIManager.GetUIComponent<GameOverUI>();
 

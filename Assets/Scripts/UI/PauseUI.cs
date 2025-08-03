@@ -167,10 +167,7 @@ public class PauseUI : UIComponent
             case 0: // Resume...
                 Show(false);
                 break;
-            case 1: // TODO: Options popup...
-                Debug.Log("Options!");
-                break;
-            case 2: // Quit to main menu...
+            case 1: // Quit to main menu...
                 BeginFade();
                 break;
         }
@@ -188,7 +185,7 @@ public class PauseUI : UIComponent
 
         switch(selectedIndex)
         {
-            case 2: // Quit to main menu...
+            case 1: // Quit to main menu...
                 SceneManager.LoadScene(0);
                 break;
         }
