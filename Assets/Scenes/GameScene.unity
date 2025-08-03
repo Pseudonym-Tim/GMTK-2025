@@ -1121,6 +1121,11 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 4b16f84eef7584b4facd58d85192b95f, type: 3}
     musicAudioSource: {fileID: 0}
     volume: 0.4
+  - trackName: GameOver
+    trackID: game_over
+    audioClip: {fileID: 8300000, guid: c69f1048d73622540b511e764ccf87e9, type: 3}
+    musicAudioSource: {fileID: 0}
+    volume: 0.4
   masterMixerGroup: {fileID: 24300002, guid: 144e5b4c29c372f4996985d8c8e95943, type: 2}
 --- !u!1 &374569952
 GameObject:

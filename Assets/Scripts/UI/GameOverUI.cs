@@ -118,6 +118,8 @@ public class GameOverUI : UIComponent
 
         if(showUI)
         {
+            MusicManager musicManager = FindFirstObjectByType<MusicManager>();
+            musicManager.PlayTrack("game_over");
             StartCoroutine(PlayGameOverSequence());
         }
     }
