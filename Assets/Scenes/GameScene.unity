@@ -4817,8 +4817,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopItemsList:
-  - {fileID: 11400000, guid: dcd0a6d92dad7cc4abf77540f1edc85f, type: 2}
-  - {fileID: 11400000, guid: 178ad0f274ea8924ebd06975f797b01a, type: 2}
+  - {fileID: 11400000, guid: 4fc4d37e9256fbc429fb4d275f0add43, type: 2}
+  - {fileID: 11400000, guid: a1e42907218a3f94aa88193b396b0ddb, type: 2}
   - {fileID: 11400000, guid: eca6c7cd57ec69b40baf2a3030f9878b, type: 2}
   - {fileID: 11400000, guid: fc8fae5b22858fc489e544a83a5e5021, type: 2}
   - {fileID: 11400000, guid: 87c4ef8b14fab3047b4d9aacfb701a44, type: 2}
