@@ -38,7 +38,7 @@ public class EnemySniperSpaceship : Enemy
     {
         base.OnEntitySpawn();
         wanderTimer = wanderChangeInterval;
-        wanderDirection = Random.insideUnitCircle.normalized * wanderRange;
+        wanderDirection = playerEntity.CenterOfMass + Random.insideUnitCircle.normalized * wanderRange;
         shootTimer = Random.Range(0f, shootCooldown);
         playerRigidbody2D = playerEntity != null ? playerEntity.GetComponent<Rigidbody2D>() : null;
     }
@@ -54,29 +54,26 @@ public class EnemySniperSpaceship : Enemy
 
         if(wanderTimer <= 0f)
         {
-            wanderDirection = Random.insideUnitCircle.normalized * wanderRange;
+            wanderDirection = playerEntity.CenterOfMass + Random.insideUnitCircle.normalized * wanderRange;
             wanderTimer = wanderChangeInterval;
         }
 
         Vector2 currentPos = EntityPosition;
         Vector2 realTarget = playerEntity.CenterOfMass;
-        Vector2 linearVel = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
-        Vector3 predicted3D = new Vector3(realTarget.x + linearVel.x * predictionLeadTime, realTarget.y + linearVel.y * predictionLeadTime, 0f);
-        Vector2 predictedPos = new Vector2(predicted3D.x, predicted3D.y);
+        Vector2 velocity = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
+
+        // wrap both the raw and predicted player positions
+        Vector2 wrappedTarget = ScreenwrapManager.GetBestWrappedPosition(currentPos, realTarget);
+        Vector2 predictedPos = realTarget + velocity * predictionLeadTime;
+        Vector2 wrappedPredictedPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, predictedPos);
 
         float distance = Vector2.Distance(currentPos, realTarget);
         bool shouldRetreat = distance <= retreatDistanceThreshold;
-        Vector2 desiredDir = (shouldRetreat ? currentPos - predictedPos : predictedPos - currentPos).normalized;
-        Vector2 desiredVel = desiredDir * moveSpeed;
 
-        if(Vector2.Dot(enemyRigidbody2D.linearVelocity, desiredVel) < desiredVel.sqrMagnitude)
-        {
-            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVel, moveAcceleration * Time.fixedDeltaTime);
-        }
-        else
-        {
-            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, Vector2.zero, moveDeceleration * Time.fixedDeltaTime);
-        }
+        Vector2 desiredDir = shouldRetreat ? (currentPos - wrappedPredictedPos).normalized : (wrappedPredictedPos - currentPos).normalized;
+
+        Vector2 desiredVel = desiredDir * moveSpeed;
+        enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVel, (Vector2.Dot(enemyRigidbody2D.linearVelocity, desiredVel) < desiredVel.sqrMagnitude ? moveAcceleration : moveDeceleration) * Time.fixedDeltaTime);
 
         Vector2 rotationDir = (predictedPos - currentPos).normalized;
         float targetAngle = Mathf.Atan2(rotationDir.y, rotationDir.x) * Mathf.Rad2Deg - 90f;
