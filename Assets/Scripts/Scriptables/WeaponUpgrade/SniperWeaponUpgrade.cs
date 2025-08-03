@@ -39,14 +39,14 @@ public class SniperWeaponUpgrade : WeaponUpgrade
     private IEnumerator ChargeAndFire(Player playerEntity)
     {
         isCharging = true;
-        float timer = 0f;
-        lockedTargetPos = FindNearestEnemyPosition(playerEntity.CenterOfMass, playerEntity.LevelManager);
-
         sfxManager.Play2DSound("sniper_charge");
+
+        float timer = 0f;
 
         while(PlayerInput.IsButtonHeld("Shoot"))
         {
             timer += Time.deltaTime;
+            lockedTargetPos = FindNearestEnemyPosition(playerEntity.CenterOfMass, playerEntity.LevelManager);
             yield return null;
         }
 
