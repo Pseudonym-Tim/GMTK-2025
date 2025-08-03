@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 /// <summary>
 /// Player spaceship entity...
@@ -33,9 +34,11 @@ public class Player : Entity, IScreenWrappable
     private float shootTimer = 0f;
     private int currentHealth = 0;
     private bool isInvulnerable = false;
+    private SFXManager sfxManager;
 
     protected override void OnEntityAwake()
     {
+        sfxManager = FindFirstObjectByType<SFXManager>();
         playerHUD = UIManager.GetUIComponent<PlayerHUD>();
         levelManager = FindFirstObjectByType<LevelManager>();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
@@ -166,6 +169,7 @@ public class Player : Entity, IScreenWrappable
     {
         BulletProjectile bulletProjectile = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPointMain.position, shootPointMain.rotation);
         bulletProjectile.Setup(BulletProjectile.BulletOwner.PLAYER, shootPointMain.up);
+        sfxManager.Play2DSound("basic_shoot");
     }
 
     public Transform ShootPoint
@@ -197,6 +201,9 @@ public class Player : Entity, IScreenWrappable
         EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
         enemyWaveManager.StopWaveLogic();
         TriggerGameOver();
+
+        sfxManager.Play2DSound("explosion");
+
         ScreenwrapManager.Unregister(this);
         DestroyEntity();
     }

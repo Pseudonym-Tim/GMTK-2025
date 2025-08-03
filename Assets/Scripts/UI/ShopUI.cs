@@ -58,6 +58,8 @@ public class ShopUI : UIComponent
         else if(InputManager.IsButtonPressed("SelectOption") && !fadeUI.IsFading)
         {
             shopManager.PurchaseItem(selectedIndex);
+            SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
+            sfxManager.Play2DSound("menu_accept");
         }
     }
 

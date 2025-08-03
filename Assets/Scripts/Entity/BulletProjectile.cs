@@ -19,10 +19,6 @@ public class BulletProjectile : Entity, IScreenWrappable
     [SerializeField] private Vector2 wrapBoundsOffset = Vector2.zero;
     [SerializeField] private int maxWraps = 3;
 
-    [Header("Bullet Sprites")]
-    [SerializeField] private Sprite playerBulletSprite;
-    [SerializeField] private Sprite enemyBulletSprite;
-
     private float ignoreTimer = 0f;
     private Rigidbody2D bulletRigidbody2D; 
     private bool hasRegisteredNearMiss = false;
@@ -55,7 +51,6 @@ public class BulletProjectile : Entity, IScreenWrappable
         // Set sprite and collision ignore timer based on owner...
         if(Owner == BulletOwner.PLAYER)
         {
-            bulletGFX.sprite = playerBulletSprite;
             ignoreTimer = IGNORE_TIME;
 
             Player player = levelManager.GetEntity<Player>();
@@ -72,7 +67,6 @@ public class BulletProjectile : Entity, IScreenWrappable
         }
         else
         {
-            bulletGFX.sprite = enemyBulletSprite;
             ignoreTimer = 0f;
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine.U2D;
 /// </summary>
 public class PlayerCamera : Entity
 {
-    private const int DEFAULT_ZOOM = 4;
+    private const int DEFAULT_ZOOM = 3;
 
     [SerializeField] private PixelCameraSettings pixelCameraSettings;
 

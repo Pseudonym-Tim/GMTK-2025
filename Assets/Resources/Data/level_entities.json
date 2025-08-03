@@ -11,8 +11,20 @@
 		"name": "Asteroid",
 		"prefab": "Asteroid"
 	},
-	"enemy_spaceship": {
-		"name": "Enemy Spaceship",
-		"prefab": "EnemySpaceship"
+	"enemy_flanker_spaceship": {
+		"name": "Enemy Flanker Spaceship",
+		"prefab": "EnemyFlankerSpaceship"
+	},
+	"enemy_basic_spaceship": {
+		"name": "Enemy Basic Spaceship",
+		"prefab": "EnemyBasicSpaceship"
+	},
+	"enemy_shotgun_spaceship": {
+		"name": "Enemy Shotgun Spaceship",
+		"prefab": "EnemyShotgunSpaceship"
+	},
+	"enemy_sniper_spaceship": {
+		"name": "Enemy Sniper Spaceship",
+		"prefab": "EnemySniperSpaceship"
 	}
 }

@@ -7,21 +7,36 @@ using UnityEngine;
 /// </summary>
 public class SpaceBackground : Singleton<SpaceBackground>
 {
-    [SerializeField] private Sprite background1;
-    [SerializeField] private Sprite background2;
+    [Header("Sprite Pairs")]
+    [SerializeField] private List<SpritePair> spritePairs = new List<SpritePair>();
     [SerializeField] private int gridWidth = 20;
     [SerializeField] private int gridHeight = 10;
     [SerializeField] private float spacing = 2f;
     [SerializeField] private int renderLayer = -1;
 
     [Header("Animation Settings")]
-    public float twinkleMinDelay = 1f;
-    public float twinkleMaxDelay = 2f;
-    [Range(0f, 1f)] public float twinkleChancePerStar = 0.2f;
-    public int minStarsTwinkle = 1;
-    public int maxStarsTwinkle = 5;
+    public float animationMinDelay = 1f;
+    public float animationMaxDelay = 2f;
+    [Range(0f, 1f)] public float animationChancePerTile = 0.2f;
+    public int minTilesAnimate = 1;
+    public int maxTilesAnimate = 5;
 
-    private List<SpriteRenderer> backgroundGFXList = new List<SpriteRenderer>();
+    private class BackgroundTile
+    {
+        public SpriteRenderer renderer;
+        public SpritePair pair;
+        public bool isFrameOne;
+    }
+
+    [System.Serializable]
+    public class SpritePair
+    {
+        public Sprite frame1;
+        public Sprite frame2; 
+        [Range(0.1f, 10f)] public float weight = 1f;
+    }
+
+    private List<BackgroundTile> tilesList = new List<BackgroundTile>();
 
     private void Awake()
     {
@@ -38,34 +53,66 @@ public class SpaceBackground : Singleton<SpaceBackground>
         {
             for(int y = 0; y < gridHeight; y++)
             {
-                GameObject background = new GameObject("Background");
-                background.transform.SetParent(transform);
-                background.transform.position = new Vector3(transform.position.x + (x * spacing - offsetX), transform.position.y + (y * spacing - offsetY), 0);
+                GameObject tileObject = new GameObject("BackgroundTile");
+                tileObject.transform.SetParent(transform);
+                tileObject.transform.position = new Vector3(transform.position.x + (x * spacing - offsetX), transform.position.y + (y * spacing - offsetY), 0);
 
-                SpriteRenderer backgroundGFX = background.AddComponent<SpriteRenderer>();
-                backgroundGFX.sortingOrder = renderLayer;
-                backgroundGFX.sprite = Random.value > 0.5f ? background1 : background2;
+                SpriteRenderer sr = tileObject.AddComponent<SpriteRenderer>();
+                sr.sortingOrder = renderLayer;
 
-                backgroundGFXList.Add(backgroundGFX);
+                SpritePair chosenPair = GetWeightedRandomPair();
+
+                bool frameOne = Random.value > 0.5f;
+                sr.sprite = frameOne ? chosenPair.frame1 : chosenPair.frame2;
+
+                BackgroundTile tile = new BackgroundTile();
+                tile.renderer = sr;
+                tile.pair = chosenPair;
+                tile.isFrameOne = frameOne;
+                tilesList.Add(tile);
             }
         }
+    }
+
+    private SpritePair GetWeightedRandomPair()
+    {
+        float totalWeight = 0f;
+        foreach(SpritePair pair in spritePairs)
+        {
+            totalWeight += pair.weight;
+        }
+
+        float randomValue = Random.value * totalWeight;
+        float cumulative = 0f;
+
+        foreach(SpritePair pair in spritePairs)
+        {
+            cumulative += pair.weight;
+            if(randomValue <= cumulative)
+            {
+                return pair;
+            }
+        }
+        return spritePairs[0];
     }
 
     private IEnumerator AnimateBackground()
     {
         while(true)
         {
-            yield return new WaitForSeconds(Random.Range(twinkleMinDelay, twinkleMaxDelay));
+            yield return new WaitForSeconds(Random.Range(animationMinDelay, animationMaxDelay));
 
-            int twinkleCount = Random.Range(minStarsTwinkle, Mathf.Min(maxStarsTwinkle, backgroundGFXList.Count));
+            int maxCount = Mathf.Min(maxTilesAnimate, tilesList.Count);
+            int animateCount = Random.Range(minTilesAnimate, maxCount);
             int changedCount = 0;
 
-            for(int i = 0; i < backgroundGFXList.Count && changedCount < twinkleCount; i++)
+            for(int i = 0; i < tilesList.Count && changedCount < animateCount; i++)
             {
-                if(Random.value <= twinkleChancePerStar)
+                if(Random.value <= animationChancePerTile)
                 {
-                    SpriteRenderer backgroundGFX = backgroundGFXList[Random.Range(0, backgroundGFXList.Count)];
-                    backgroundGFX.sprite = backgroundGFX.sprite == background1 ? background2 : background1;
+                    BackgroundTile tile = tilesList[Random.Range(0, tilesList.Count)];
+                    tile.isFrameOne = !tile.isFrameOne;
+                    tile.renderer.sprite = tile.isFrameOne ? tile.pair.frame1 : tile.pair.frame2;
                     changedCount++;
                 }
             }

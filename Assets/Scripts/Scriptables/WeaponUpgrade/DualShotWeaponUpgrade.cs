@@ -10,6 +10,9 @@ public class DualShotWeaponUpgrade : WeaponUpgrade
 
         SpawnBullet(playerEntity, left);
         SpawnBullet(playerEntity, right);
+
+        SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
+        sfxManager.Play2DSound("basic_shoot");
     }
 
     private void SpawnBullet(Player player, Transform point)

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 [CreateAssetMenu(fileName = "NewSniperWeaponUpgrade", menuName = GameManager.GAME_NAME + "/WeaponUpgrade/SniperWeaponUpgrade")]
 public class SniperWeaponUpgrade : WeaponUpgrade
@@ -8,6 +9,7 @@ public class SniperWeaponUpgrade : WeaponUpgrade
 
     private bool isCharging = false;
     private Vector2? lockedTargetPos = null;
+    private SFXManager sfxManager;
 
     public override void Shoot(Player player)
     {
@@ -16,6 +18,7 @@ public class SniperWeaponUpgrade : WeaponUpgrade
             return;
         }
 
+        sfxManager = FindFirstObjectByType<SFXManager>();
         player.StartCoroutine(ChargeAndFire(player));
     }
 
@@ -39,6 +42,8 @@ public class SniperWeaponUpgrade : WeaponUpgrade
         float timer = 0f;
         lockedTargetPos = FindNearestEnemyPosition(playerEntity.CenterOfMass, playerEntity.LevelManager);
 
+        sfxManager.Play2DSound("sniper_charge");
+
         while(PlayerInput.IsButtonHeld("Shoot"))
         {
             timer += Time.deltaTime;
@@ -53,6 +58,12 @@ public class SniperWeaponUpgrade : WeaponUpgrade
 
             BulletProjectile proj = (BulletProjectile)playerEntity.LevelManager.SpawnEntity("bullet_projectile", playerEntity.ShootPoint.position, rot);
             proj.Setup(BulletProjectile.BulletOwner.PLAYER, dir.normalized);
+
+            sfxManager.Play2DSound("sniper_fire");
+        }
+        else
+        {
+            sfxManager.Play2DSound("sniper_charge_cancel");
         }
 
         lockedTargetPos = null;

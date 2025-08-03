@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 /// <summary>
 /// Handles everything related to the pause UI...
@@ -68,7 +69,19 @@ public class PauseUI : UIComponent
 
         if(InputManager.IsButtonPressed("Pause"))
         {
-            Show(!UICanvas.enabled);
+            SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
+            bool newState = !UICanvas.enabled;
+
+            if(newState)
+            {
+                sfxManager.Play2DSound("menu_accept");
+            }
+            else
+            {
+                sfxManager.Play2DSound("menu_back");
+            }
+
+            Show(newState);
         }
 
         if(!IsInteractable) { return; }
@@ -85,6 +98,8 @@ public class PauseUI : UIComponent
         if(InputManager.IsButtonPressed("SelectOption"))
         {
             SelectOption(selectedIndex);
+            SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
+            sfxManager.Play2DSound("menu_accept");
         }
     }
 

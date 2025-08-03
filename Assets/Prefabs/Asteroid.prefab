@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -713850085, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: 7401911616379704984, guid: 376b7d2ea893b1b4b8d0b460c50630c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -174,9 +174,10 @@ MonoBehaviour:
   maxRotationSpeed: 30
   asteroidGFX: {fileID: 2637199918135579362}
   spriteList:
-  - {fileID: -2022851780, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
-  - {fileID: 9559978, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
-  - {fileID: -713850085, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  - {fileID: 7401911616379704984, guid: 376b7d2ea893b1b4b8d0b460c50630c2, type: 3}
+  - {fileID: 1888456583092694709, guid: a2bca97de22e30243a255b08994d3247, type: 3}
+  - {fileID: -8365950929126905008, guid: 217493578e001364883a0778e0a6f117, type: 3}
+  - {fileID: 6406708564178889740, guid: bb982402ca9e9f147849566f1829b7c1, type: 3}
   wrapBoundsSize: {x: 1, y: 1}
   wrapBoundsOffset: {x: 0, y: 0}
   minWrapCount: 100
@@ -197,7 +198,7 @@ MonoBehaviour:
     Type: 1
     Center: {x: 0, y: 0}
     Size: {x: 1, y: 1}
-    Radius: 0.225
+    Radius: 0.33333334
 --- !u!50 &5508643764089702882
 Rigidbody2D:
   serializedVersion: 5

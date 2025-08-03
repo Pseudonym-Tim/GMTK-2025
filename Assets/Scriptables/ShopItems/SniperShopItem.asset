@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b65cd4d1e696b948b7cf517d832f172, type: 3}
+  m_Name: SniperShopItem
+  m_EditorClassIdentifier: 
+  itemName: SNIPER
+  icon: {fileID: 21300000, guid: 9e137c33848c3fa49839e44fbf5ebb19, type: 3}
+  description: Charge up to automatically target and shoot enemies!
+  scaleWithPoints: 1
+  costPercentage: 0.5
+  baseCost: 100
+  minCost: 1
+  weaponUpgrade: {fileID: 11400000, guid: 8786cec78e76d264995caada48078242, type: 2}

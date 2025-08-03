@@ -361,7 +361,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 733543804, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b89acb48edefe548ba50363c8942489, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -453,7 +453,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 733543804, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b89acb48edefe548ba50363c8942489, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -971,7 +971,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UICanvas: {fileID: 637156016}
   UICanvasGroup: {fileID: 637156013}
+  backgroundFadeDuration: 0.5
   destroyedHeaderImage: {fileID: 1992012101}
+  backgroundImage: {fileID: 219569098}
   finalScoreText: {fileID: 1993077046}
   newHighscoreText: {fileID: 125540040}
   statReports:
@@ -1060,7 +1062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.101960786}
+  m_Color: {r: 0.35, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2058,7 +2060,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_TargetDisplay: 0
 --- !u!1 &666268536
 GameObject:
@@ -2134,7 +2136,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 733543804, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b89acb48edefe548ba50363c8942489, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2393,8 +2395,11 @@ MonoBehaviour:
   extraEnemiesMax: 3
   shopEveryWave: 5
   enemyEntityIDList:
-  - enemy_spaceship
-  spawnInterval: 2
+  - enemy_flanker_spaceship
+  - enemy_basic_spaceship
+  - enemy_shotgun_spaceship
+  - enemy_sniper_spaceship
+  spawnInterval: 3
   minAsteroids: 3
   maxAsteroids: 6
   waveStartDelay: 3
@@ -2989,7 +2994,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 733543804, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b89acb48edefe548ba50363c8942489, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3510,7 +3515,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 450, y: 125}
+  m_SizeDelta: {x: 425, y: 110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1267997357
 MonoBehaviour:
@@ -3681,17 +3686,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a12dc146ccad440b30bd2b000fbebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background1: {fileID: 2048242328, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
-  background2: {fileID: 1671515954, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  spritePairs:
+  - frame1: {fileID: 21300000, guid: c40f836fb727a8b4d8d422241c6ac173, type: 3}
+    frame2: {fileID: 21300000, guid: 653669a0b9824bd45aa324dfad4933f5, type: 3}
+    weight: 3
+  - frame1: {fileID: 21300000, guid: 936f3dacbf0ceff4ba88f92e8d1dd3b5, type: 3}
+    frame2: {fileID: 21300000, guid: 02c45e4753e7e5045959936175dcec36, type: 3}
+    weight: 2
+  - frame1: {fileID: 21300000, guid: 0e9113f44b3f8a946b0a67a49c900f34, type: 3}
+    frame2: {fileID: 21300000, guid: ba66267ba11cb1a48b92f7acd06684e3, type: 3}
+    weight: 1
+  - frame1: {fileID: 21300000, guid: 72a787439246e134ea2757c9aedb493e, type: 3}
+    frame2: {fileID: 21300000, guid: 80986d94a3128024cb8b4817453bc080, type: 3}
+    weight: 0.1
   gridWidth: 10
   gridHeight: 10
   spacing: 2
   renderLayer: -1
-  twinkleMinDelay: 0.1
-  twinkleMaxDelay: 0.125
-  twinkleChancePerStar: 0.5
-  minStarsTwinkle: 10
-  maxStarsTwinkle: 10
+  animationMinDelay: 1
+  animationMaxDelay: 2
+  animationChancePerTile: 0.2
+  minTilesAnimate: 1
+  maxTilesAnimate: 5
 --- !u!1 &1370819484
 GameObject:
   m_ObjectHideFlags: 0
@@ -3931,7 +3947,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e12d7900c3d5a144bb0747602ec53c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundDatabase: []
+  soundDatabase:
+  - soundName: basic_shoot
+    audioClip: {fileID: 8300000, guid: 4fed87083be83db4981a88dc7782e463, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: explosion
+    audioClip: {fileID: 8300000, guid: fba25ad835a6c9548b6062ce6afff4ca, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: flanker_shoot
+    audioClip: {fileID: 8300000, guid: 758da8e2adb592543adc9a30f31a6c43, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: shotgun_shoot
+    audioClip: {fileID: 8300000, guid: 0f192835d32082d49a9cf9a25822983b, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: menu_accept
+    audioClip: {fileID: 8300000, guid: a722c55c00306b6419d6777bfc236999, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: menu_back
+    audioClip: {fileID: 8300000, guid: 0c02a045b04c1d249acfd83c2960e8bd, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: sniper_charge
+    audioClip: {fileID: 8300000, guid: 15aadefa689e2fc4bad5f37a5b2b0fd3, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: sniper_charge_cancel
+    audioClip: {fileID: 8300000, guid: 81daf2d50713102488af52a5b8663276, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: sniper_fire
+    audioClip: {fileID: 8300000, guid: 902497182d17d9340939368bda80a6e2, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchRandomMin: 0.9
+    pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
   masterMixerGroup: {fileID: 24300002, guid: 9378b95aac415de44a72c6589763dda3, type: 2}
 --- !u!1 &1405185309
 GameObject:
@@ -4893,8 +5026,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopItemsList:
   - {fileID: 11400000, guid: dcd0a6d92dad7cc4abf77540f1edc85f, type: 2}
-  - {fileID: 11400000, guid: 22bea3f4d0e741940bd574d949a6b66a, type: 2}
-  - {fileID: 11400000, guid: f4358f9807e47614a967dcd624e5feaa, type: 2}
+  - {fileID: 11400000, guid: 178ad0f274ea8924ebd06975f797b01a, type: 2}
+  - {fileID: 11400000, guid: eca6c7cd57ec69b40baf2a3030f9878b, type: 2}
+  - {fileID: 11400000, guid: fc8fae5b22858fc489e544a83a5e5021, type: 2}
+  - {fileID: 11400000, guid: d7e37064c1a7b1d4a9a7770795c9e67a, type: 2}
+  - {fileID: 11400000, guid: 3f109a08876b1064092560494074b375, type: 2}
+  - {fileID: 11400000, guid: bc14da0318158094da4db027d8ab098d, type: 2}
 --- !u!1 &1657970864
 GameObject:
   m_ObjectHideFlags: 0
@@ -5498,7 +5635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 733543804, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b89acb48edefe548ba50363c8942489, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1

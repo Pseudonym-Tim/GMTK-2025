@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 /// <summary>
 /// A dangerous meteroid type obstacle...
@@ -24,9 +25,11 @@ public class Asteroid : Entity, IScreenWrappable
     private int maximumWrapCount = 0;
     private int currentHealth;
     private BulletProjectile lastDamageSource;
+    private SFXManager sfxManager;
 
     protected override void OnEntityAwake()
     {
+        sfxManager = FindFirstObjectByType<SFXManager>();
         asteroidRigidbody2D = GetComponent<Rigidbody2D>();
     }
 
@@ -108,6 +111,8 @@ public class Asteroid : Entity, IScreenWrappable
 
     private void OnDeath()
     {
+        sfxManager.Play2DSound("explosion");
+
         CheckAwardPoints();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();

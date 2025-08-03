@@ -27,5 +27,8 @@ public class BurstShotWeaponUpgrade : WeaponUpgrade
         Transform point = player.ShootPoint;
         BulletProjectile bulletProjectile = (BulletProjectile)player.LevelManager.SpawnEntity("bullet_projectile", point.position, point.rotation);
         bulletProjectile.Setup(BulletProjectile.BulletOwner.PLAYER, point.up);
+
+        SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
+        sfxManager.Play2DSound("basic_shoot");
     }
 }

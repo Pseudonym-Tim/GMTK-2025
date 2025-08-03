@@ -124,6 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 505392895932045679}
   - component: {fileID: 4363662120493477640}
+  - component: {fileID: 7179784498582278803}
   m_Layer: 0
   m_Name: BulletGFX
   m_TagString: Untagged
@@ -190,7 +191,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1723936360, guid: 9638394f343660b40a32a8d18ea88334, type: 3}
+  m_Sprite: {fileID: -2103781471239378940, guid: 7eb3e0817361f624cbec8a9ac58d8cf0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -201,3 +202,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7179784498582278803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269056440188918132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af97c4dbdd43ee844839fb92413f02b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: -2103781471239378940, guid: 7eb3e0817361f624cbec8a9ac58d8cf0, type: 3}
+  - {fileID: 9041251895537658667, guid: 3773c0f25f0770346b5f78bc1da5ff3c, type: 3}
+  - {fileID: -6834827352629592672, guid: 1e721f6c33fa67f45a8efd5983b255cb, type: 3}
+  speed: 3

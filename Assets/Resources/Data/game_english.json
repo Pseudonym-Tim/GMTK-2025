@@ -21,7 +21,7 @@
         "nearMissText": "<color=#ffffff><u>NEAR MISSES:</u>%nearMiss%</color>",
         "waveCompleteText": "<color=#ffffff><u>WAVES COMPLETED:</u>%waves%</color>",
         "stageCompleteText": "<color=#ffffff><u>STAGES COMPLETED:</u>%stages%</color>",
-        "currentScoreText": "<color=#ffffff><u>TOTAL KILLS:</u>%score%</color>",
+        "finalScoreText": "<color=#ffffff><u>FINAL SCORE:</u>%score%</color>",
         "highscoreText": "<color=#ffffff><u>NEW HIGHSCORE!</u></color>"
     }
 }
