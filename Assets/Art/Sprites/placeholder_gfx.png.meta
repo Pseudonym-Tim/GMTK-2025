@@ -451,6 +451,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: placeholder_gfx_1
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 23
+        width: 33
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3660d8cfc4d8fb244a67ab3975c739bf
+      internalID: -807601224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -477,6 +499,7 @@ TextureImporter:
       panel_ui_2: -469673913
       panel_ui_3: -1190561222
       placeholder_gfx_0: 1780411305
+      placeholder_gfx_1: -807601224
       player_bullet: 1723936360
       player_ship_flame: 1368877964195804896
       player_spaceship_1: 1728717574

@@ -26,7 +26,6 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
     private LevelManager levelManager;
     private PlayerHUD playerHUD;
     private ShopManager shopManager; 
-    private bool shopShownThisWave = false;
     private FadeUI fadeUI;
     private bool isGameOver = false;
 

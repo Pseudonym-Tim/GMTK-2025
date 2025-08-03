@@ -29,9 +29,8 @@ public class ShopItem : ScriptableObject
         return Mathf.Max(minCost, itemCost);
     }
 
-    public void Apply()
+    public virtual void Apply(Player playerEntity)
     {
-        // TODO: Implement the actual effect of this item/upgrade/weapon...
-        Debug.Log("Use shop item!");
+        
     }
 }

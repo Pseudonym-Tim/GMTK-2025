@@ -29,19 +29,27 @@ public class BulletProjectile : Entity, IScreenWrappable
     private float nearMissCooldown = 0.5f;
     private float nearMissTimer = 0f;
 
+    private bool homingEnabled = false;
+    private float homingStrength = 0f;
+    private LevelManager levelManager;
+
     protected override void OnEntityAwake()
     {
         bulletRigidbody2D = GetComponent<Rigidbody2D>();
+        levelManager = FindFirstObjectByType<LevelManager>();
     }
 
     public void Setup(BulletOwner owner, Vector2 direction, float overrideSpeed = -1)
     {
         Owner = owner;
-
         ScreenwrapsUsed = 0;
         ScreenwrapManager.Register(this);
 
-        if(overrideSpeed > 0) { bulletSpeed = overrideSpeed; }
+        if(overrideSpeed > 0) 
+        { 
+            bulletSpeed = overrideSpeed; 
+        }
+
         bulletRigidbody2D.linearVelocity = direction.normalized * bulletSpeed;
 
         // Set sprite and collision ignore timer based on owner...
@@ -49,12 +57,30 @@ public class BulletProjectile : Entity, IScreenWrappable
         {
             bulletGFX.sprite = playerBulletSprite;
             ignoreTimer = IGNORE_TIME;
+
+            Player player = levelManager.GetEntity<Player>();
+
+            if(player != null)
+            {
+                maxWraps += player.BulletWrapUpgradeCount;
+
+                if(player.HasHomingBullets) 
+                {
+                    EnableHoming(player.HomingStrength); 
+                }
+            }
         }
         else
         {
             bulletGFX.sprite = enemyBulletSprite;
             ignoreTimer = 0f;
         }
+    }
+
+    public void EnableHoming(float strength)
+    {
+        homingEnabled = true;
+        homingStrength = strength;
     }
 
     private void FixedUpdate()
@@ -65,7 +91,30 @@ public class BulletProjectile : Entity, IScreenWrappable
         }
 
         Vector2 rotatedOffset = Quaternion.Euler(0, 0, EntityEulerAngles.z) * hitBoxOffset;
-        Vector3 checkPos = EntityPosition + rotatedOffset;
+        Vector2 checkPos = EntityPosition + rotatedOffset;
+
+        // Homing bullet logic...
+        if(homingEnabled && Owner == BulletOwner.PLAYER)
+        {
+            Enemy[] enemies = levelManager.GetEntities<Enemy>().ToArray();
+
+            float minDist = float.MaxValue;
+            Enemy nearest = null;
+
+            foreach(Enemy enemy in enemies)
+            {
+                float dist = Vector2.Distance(enemy.CenterOfMass, checkPos);
+                if(dist < minDist) { minDist = dist; nearest = enemy; }
+            }
+
+            if(nearest != null)
+            {
+                Vector2 toTarget = (nearest.CenterOfMass - checkPos).normalized;
+                Vector2 currentDir = bulletRigidbody2D.linearVelocity.normalized;
+                Vector2 newDir = Vector2.Lerp(currentDir, toTarget, homingStrength);
+                bulletRigidbody2D.linearVelocity = newDir * bulletSpeed;
+            }
+        }
 
         LayerMask layerMask = LayerManager.Masks.ASTEROID;
 

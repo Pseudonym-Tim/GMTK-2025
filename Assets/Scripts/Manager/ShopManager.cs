@@ -54,10 +54,13 @@ public class ShopManager : Singleton<ShopManager>
         int costAmount = shopItem.GetCost();
         ShopUI shopUI = UIManager.GetUIComponent<ShopUI>();
 
+        LevelManager levelManager = FindFirstObjectByType<LevelManager>();
+        Player playerEntity = levelManager.GetEntity<Player>();
+
         if(scoreManager.CurrentScore >= costAmount)
         {
             scoreManager.RemoveScore(costAmount);
-            shopItem.Apply();
+            shopItem.Apply(playerEntity);
 
             shopUI.UpdateRemainingPoints(scoreManager.CurrentScore);
             shopUI.UpdateShopItemCostText(index, TextHandler.GetText("shopInfoBoughtText", "shop_ui"));

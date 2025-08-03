@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 /// <summary>
 /// Player spaceship entity...
@@ -16,8 +15,11 @@ public class Player : Entity, IScreenWrappable
     [SerializeField] private float moveSpeed = 5f;
 
     [Header("Shooting")]
-    [SerializeField] private Transform shootPoint;
-    [SerializeField] private float shootCooldown = 0.25f;
+    [SerializeField] private Transform shotPointLeft;
+    [SerializeField] private Transform shotPointRight;
+    [SerializeField] private Transform shootPointMain;
+    [SerializeField] private float shootCooldown = 0.25f; 
+    [SerializeField] private int bulletWrapUpgradeCount = 0;
 
     [Header("Screenwrap")]
     [SerializeField] private Vector2 wrapBoundsSize = new Vector2(1f, 1f);
@@ -26,6 +28,7 @@ public class Player : Entity, IScreenWrappable
     private Rigidbody2D playerRigidbody2D;
     private LevelManager levelManager;
     private PlayerHUD playerHUD;
+    private WeaponUpgrade currentWeaponUpgrade = null;
     private float targetRotation;
     private float shootTimer = 0f;
     private int currentHealth = 0;
@@ -50,6 +53,12 @@ public class Player : Entity, IScreenWrappable
         PlayerInput.InputEnabled = true;
     }
 
+    public void RestoreHealthFull()
+    {
+        currentHealth = maxHealth;
+        playerHUD.UpdatePlayerHP(currentHealth);
+    }
+
     protected override void OnEntityUpdate()
     {
         if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab) && Input.GetKeyDown(KeyCode.F12))
@@ -57,15 +66,46 @@ public class Player : Entity, IScreenWrappable
             isInvulnerable = !isInvulnerable;
         }
 
-        if(!PlayerInput.InputEnabled) { return; }
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab) && Input.GetKeyDown(KeyCode.K))
+        {
+            TakeDamage(9999);
+        }
 
-        // Turn ship...
-        float rotationInput = 0f;
-        if(PlayerInput.IsButtonHeld("TurnLeft")) { rotationInput = 1f; }
-        if(PlayerInput.IsButtonHeld("TurnRight")) { rotationInput = -1f; }
-        targetRotation = playerRigidbody2D.rotation + rotationInput * rotateSpeed;
+        if(!PlayerInput.InputEnabled)
+        {
+            return;
+        }
 
+        UpdateShipRotation();
         UpdateShooting();
+    }
+
+    private void UpdateShipRotation()
+    {
+        float newTarget = 0f;
+
+        if(currentWeaponUpgrade != null && currentWeaponUpgrade.TryGetRotationLock(this, out float lockedRot))
+        {
+            newTarget = lockedRot;
+        }
+        else
+        {
+            float rotInput = 0f;
+
+            if(PlayerInput.IsButtonHeld("TurnLeft"))
+            {
+                rotInput = 1f;
+            }
+
+            if(PlayerInput.IsButtonHeld("TurnRight"))
+            {
+                rotInput = -1f;
+            }
+
+            newTarget = playerRigidbody2D.rotation + rotInput * rotateSpeed;
+        }
+
+        targetRotation = newTarget;
     }
 
     private void FixedUpdate()
@@ -106,15 +146,50 @@ public class Player : Entity, IScreenWrappable
 
         if(PlayerInput.IsButtonHeld("Shoot") && shootTimer <= 0f)
         {
-            ShootBullet();
+            Shoot();
             shootTimer = shootCooldown;
         }
     }
 
-    private void ShootBullet()
+    private void Shoot()
     {
-        BulletProjectile bulletProjectile = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPoint.position, shootPoint.rotation);
-        bulletProjectile.Setup(BulletProjectile.BulletOwner.PLAYER, shootPoint.up);
+        if(currentWeaponUpgrade != null)
+        {
+            currentWeaponUpgrade.Shoot(this);
+            return;
+        }
+
+        ShootStandard();
+    }
+
+    private void ShootStandard()
+    {
+        BulletProjectile bulletProjectile = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPointMain.position, shootPointMain.rotation);
+        bulletProjectile.Setup(BulletProjectile.BulletOwner.PLAYER, shootPointMain.up);
+    }
+
+    public Transform ShootPoint
+    {
+        get
+        {
+            return shootPointMain;
+        }
+    }
+
+    public Transform ShotPointLeft
+    {
+        get
+        {
+            return shotPointLeft;
+        }
+    }
+
+    public Transform ShotPointRight
+    {
+        get
+        {
+            return shotPointRight;
+        }
     }
 
     public void OnDeath()
@@ -124,6 +199,11 @@ public class Player : Entity, IScreenWrappable
         TriggerGameOver();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();
+    }
+
+    public void EquipWeaponUpgrade(WeaponUpgrade upgrade)
+    {
+        currentWeaponUpgrade = upgrade;
     }
 
     public void OnScreenwrap()
@@ -156,6 +236,14 @@ public class Player : Entity, IScreenWrappable
         Gizmos.DrawWireCube(center3D, size3D);
     }
 
+    public int BulletWrapUpgradeCount
+    {
+        get { return bulletWrapUpgradeCount; }
+        set { bulletWrapUpgradeCount = value; }
+    }
+
+    public LevelManager LevelManager => levelManager;
+
     public PlayerStatistics PlayerStatistics { get; set; } = null;
     public Vector2 ScreenwrapBoundsSize { get => wrapBoundsSize; }
     public Vector2 ScreenwrapBoundsOffset { get => wrapBoundsOffset; }
@@ -163,4 +251,7 @@ public class Player : Entity, IScreenWrappable
     public int ScreenwrapsUsed { get; set; }
 
     public PlayerCamera PlayerCamera { get; private set; } = null;
+
+    public bool HasHomingBullets { get; set; } = false;
+    public float HomingStrength { get; set; } = 0f;
 }
