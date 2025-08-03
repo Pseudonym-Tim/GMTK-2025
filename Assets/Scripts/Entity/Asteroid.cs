@@ -67,10 +67,8 @@ public class Asteroid : Entity, IScreenWrappable
 
             Rigidbody2D playerRigidbody2D = player.GetComponent<Rigidbody2D>();
 
-            float knockbackForceEnemy = 5f;
             float knockbackForcePlayer = 5f;
 
-            asteroidRigidbody2D.linearVelocity = -knockbackDir * knockbackForceEnemy;
             playerRigidbody2D.linearVelocity = knockbackDir * knockbackForcePlayer;
         }
 
@@ -85,10 +83,8 @@ public class Asteroid : Entity, IScreenWrappable
 
             Rigidbody2D otherEnemyRigidbody2D = otherEnemy.GetComponent<Rigidbody2D>();
 
-            float knockbackForceThisEnemy = 5f;
             float knockbackForceOtherEnemy = 5f;
 
-            asteroidRigidbody2D.linearVelocity = -knockbackDir * knockbackForceThisEnemy;
             otherEnemyRigidbody2D.linearVelocity = knockbackDir * knockbackForceOtherEnemy;
         }
 
