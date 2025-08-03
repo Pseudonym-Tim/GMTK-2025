@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 2
   pointsToAward: 300
+  enemyGFX: {fileID: 8343374078324984990}
   wrapBoundsSize: {x: 1.25, y: 1.25}
   wrapBoundsOffset: {x: 0, y: 0}
   rotateSpeed: 50

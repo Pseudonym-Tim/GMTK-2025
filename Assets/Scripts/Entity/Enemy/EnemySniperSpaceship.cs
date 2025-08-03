@@ -85,7 +85,7 @@ public class EnemySniperSpaceship : Enemy
 
         shootTimer -= Time.fixedDeltaTime;
 
-        if(shootTimer <= 0f && distance <= detectionRange && !isCharging)
+        if(shootTimer <= 0f && distance <= detectionRange && !isCharging && IsVisibleOnScreen())
         {
             StartCoroutine(ChargeAndShoot(predictedPos));
             shootTimer = shootCooldown;

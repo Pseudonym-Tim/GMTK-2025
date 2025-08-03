@@ -133,7 +133,7 @@ public class EnemyBasicSpaceship : Enemy
     {
         shootTimer -= Time.deltaTime;
 
-        if(shootTimer > 0f || Vector2.Distance(CenterOfMass, playerEntity.CenterOfMass) > detectionRange)
+        if(shootTimer > 0f || Vector2.Distance(CenterOfMass, playerEntity.CenterOfMass) > detectionRange || !IsVisibleOnScreen())
         {
             return;
         }

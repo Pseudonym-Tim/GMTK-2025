@@ -10,6 +10,7 @@ public class Enemy : Entity, IScreenWrappable
 {
     public int maxHealth = 3;
     [SerializeField] private int pointsToAward = 300;
+    public SpriteRenderer enemyGFX;
 
     [Header("Screenwrap")]
     public Vector2 wrapBoundsSize = new Vector2(1f, 1f);
@@ -125,6 +126,18 @@ public class Enemy : Entity, IScreenWrappable
         Instantiate(explosionPrefab, CenterOfMass, randomRot);
         playerEntity?.PlayerCamera.Shake(1f, 0.5f / 2);
         sfxManager.Play2DSound("explosion");
+    }
+
+    protected bool IsVisibleOnScreen()
+    {
+        if(enemyGFX == null || Camera.main == null)
+        {
+            return false;
+        }
+
+        Bounds bounds = enemyGFX.bounds;
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+        return GeometryUtility.TestPlanesAABB(planes, bounds);
     }
 
     private void CheckAwardPoints()
