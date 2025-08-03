@@ -1,5 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.VFX;
@@ -11,8 +13,8 @@ public class PauseUI : UIComponent
 {
     private const float BOB_FREQUENCY = 5.0f;
     private const float BOB_AMPLITUDE = 10.0f;
-
     private const float OPTION_DARKEN_FACTOR = 0.75f;
+    private const float INPUT_BUFFER_DURATION = 0.1f;
 
     public Image logoImage;
     [SerializeField] private MenuOption[] menuOptions;
@@ -52,12 +54,20 @@ public class PauseUI : UIComponent
             GameManager.PauseGame();
             SetCanvasInteractivity(true);
             HighlightOption(selectedIndex);
+            PlayerInput.InputEnabled = false;
         }
         else
         {
+            StartCoroutine(EnableInputAfterDelay(INPUT_BUFFER_DURATION));
             GameManager.ResumeGame();
             SetCanvasInteractivity(false);
         }
+    }
+
+    private IEnumerator EnableInputAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayerInput.InputEnabled = true;
     }
 
     private void Update()
@@ -73,6 +83,8 @@ public class PauseUI : UIComponent
             SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
             bool newState = !UICanvas.enabled;
 
+            PlayerInput.InputEnabled = newState;
+
             if(newState)
             {
                 sfxManager.Play2DSound("menu_accept");
@@ -85,7 +97,10 @@ public class PauseUI : UIComponent
             Show(newState);
         }
 
-        if(!IsInteractable) { return; }
+        if(!IsInteractable)
+        {
+            return;
+        }
 
         if(InputManager.IsButtonPressed("NavigateDown") || InputManager.IsButtonPressed("NavigateLeft"))
         {
@@ -104,7 +119,10 @@ public class PauseUI : UIComponent
         }
     }
 
-    private void LateUpdate() => UpdateLogoBob();
+    private void LateUpdate()
+    {
+        UpdateLogoBob();
+    }
 
     private void UpdateLogoBob()
     {
