@@ -43,13 +43,13 @@ public class MainMenuUI : UIComponent
     {
         if(!IsInteractable) { return; }
 
-        if(InputManager.IsButtonPressed("NavigateDown") || InputManager.IsButtonPressed("NavigateUp"))
-        {
-            NavigateOption(-1);
-        }
-        else if(InputManager.IsButtonPressed("NavigateLeft") || InputManager.IsButtonPressed("NavigateRight"))
+        if(InputManager.IsButtonPressed("NavigateDown") || InputManager.IsButtonPressed("NavigateLeft"))
         {
             NavigateOption(1);
+        }
+        else if(InputManager.IsButtonPressed("NavigateUp") || InputManager.IsButtonPressed("NavigateRight"))
+        {
+            NavigateOption(-1);
         }
 
         if(InputManager.IsButtonPressed("SelectOption"))
@@ -122,17 +122,11 @@ public class MainMenuUI : UIComponent
             case 0: // Start...
                 BeginFade();
                 break;
-            case 1: // TODO: Tutorial popup...
-                Debug.Log("Tutorial!");
-                break;
-            case 2: // TODO: Options popup...
-                Debug.Log("Options!");
-                break;
-            case 3: // TODO: Credits...
+            case 1: // TODO: Credits...
                 BeginFade();
                 Debug.Log("Credits!");
                 break;
-            case 4: // Quit game...
+            case 2: // Quit game...
                 BeginFade();
                 break;
         }
@@ -155,10 +149,10 @@ public class MainMenuUI : UIComponent
             case 0: // Start...
                 SceneManager.LoadScene(1);
                 break;
-            case 3:  // TODO: Credits...
+            case 1:  // TODO: Credits...
 
                 break;
-            case 4: // Quit game...
+            case 2: // Quit game...
                 Application.Quit();
                 break;
         }

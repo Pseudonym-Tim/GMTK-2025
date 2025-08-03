@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -101,20 +102,14 @@ public class SpaceBackground : Singleton<SpaceBackground>
         while(true)
         {
             yield return new WaitForSeconds(Random.Range(animationMinDelay, animationMaxDelay));
-
             int maxCount = Mathf.Min(maxTilesAnimate, tilesList.Count);
-            int animateCount = Random.Range(minTilesAnimate, maxCount);
-            int changedCount = 0;
+            int animateCount = Random.Range(minTilesAnimate, maxCount + 1);
 
-            for(int i = 0; i < tilesList.Count && changedCount < animateCount; i++)
+            for(int j = 0; j < animateCount; j++)
             {
-                if(Random.value <= animationChancePerTile)
-                {
-                    BackgroundTile tile = tilesList[Random.Range(0, tilesList.Count)];
-                    tile.isFrameOne = !tile.isFrameOne;
-                    tile.renderer.sprite = tile.isFrameOne ? tile.pair.frame1 : tile.pair.frame2;
-                    changedCount++;
-                }
+                BackgroundTile tile = tilesList[Random.Range(0, tilesList.Count)];
+                tile.isFrameOne = !tile.isFrameOne;
+                tile.renderer.sprite = tile.isFrameOne ? tile.pair.frame1 : tile.pair.frame2;
             }
         }
     }

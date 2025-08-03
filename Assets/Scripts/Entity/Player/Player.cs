@@ -132,6 +132,8 @@ public class Player : Entity, IScreenWrappable
         currentHealth -= damageToTake;
         if(currentHealth < 0) { currentHealth = 0; }
 
+        PlayerCamera.Shake(0.25f / 2, 0.025f);
+
         playerHUD.UpdatePlayerHP(currentHealth);
 
         if(currentHealth <= 0)
@@ -151,6 +153,7 @@ public class Player : Entity, IScreenWrappable
         {
             Shoot();
             shootTimer = shootCooldown;
+            PlayerCamera.Shake(0.25f / 2, 0.025f);
         }
     }
 
@@ -201,6 +204,8 @@ public class Player : Entity, IScreenWrappable
         EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
         enemyWaveManager.StopWaveLogic();
         TriggerGameOver();
+
+        PlayerCamera.Shake(1f, 0.25f);
 
         sfxManager.Play2DSound("explosion");
 

@@ -2390,7 +2390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wavesPerStage: 5
-  initialEnemyCount: 3
+  initialEnemyCount: 5
   extraEnemiesMin: 1
   extraEnemiesMax: 3
   shopEveryWave: 5
@@ -2399,9 +2399,9 @@ MonoBehaviour:
   - enemy_basic_spaceship
   - enemy_shotgun_spaceship
   - enemy_sniper_spaceship
-  spawnInterval: 3
-  minAsteroids: 3
-  maxAsteroids: 6
+  spawnInterval: 4
+  minAsteroids: 2
+  maxAsteroids: 4
   waveStartDelay: 3
 --- !u!1 &810278555
 GameObject:
@@ -3699,15 +3699,15 @@ MonoBehaviour:
   - frame1: {fileID: 21300000, guid: 72a787439246e134ea2757c9aedb493e, type: 3}
     frame2: {fileID: 21300000, guid: 80986d94a3128024cb8b4817453bc080, type: 3}
     weight: 0.1
-  gridWidth: 10
-  gridHeight: 10
+  gridWidth: 20
+  gridHeight: 20
   spacing: 2
   renderLayer: -1
-  animationMinDelay: 1
-  animationMaxDelay: 2
-  animationChancePerTile: 0.2
-  minTilesAnimate: 1
-  maxTilesAnimate: 5
+  animationMinDelay: 0.125
+  animationMaxDelay: 0.125
+  animationChancePerTile: 1
+  minTilesAnimate: 20
+  maxTilesAnimate: 20
 --- !u!1 &1370819484
 GameObject:
   m_ObjectHideFlags: 0

@@ -57,7 +57,7 @@ MonoBehaviour:
   rotateSpeed: 5
   moveAcceleration: 20
   moveDeceleration: 10
-  moveSpeed: 4
+  moveSpeed: 6
   shotPointLeft: {fileID: 6980245938073853381}
   shotPointRight: {fileID: 5877342812487176914}
   shootPointMain: {fileID: 4111536061532139952}
@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1acc5ea06f0be48974412fb96b9434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shakeTransform: {fileID: 4087529709839508824}
   pixelCameraSettings:
     pixelsPerUnit: 32
     upscaleRenderTexture: 1
