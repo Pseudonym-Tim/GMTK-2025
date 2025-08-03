@@ -543,7 +543,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <u>NEW HIGHSCORE!
+  m_text: <u>NEW HIGHSCORE!</u>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 27d41c7bca395e3478bf023284cf9718, type: 2}
   m_sharedMaterial: {fileID: 4887795130569178103, guid: 27d41c7bca395e3478bf023284cf9718, type: 2}
@@ -1003,8 +1003,8 @@ MonoBehaviour:
   scaleDuration: 0.5
   shakeDuration: 0.5
   shakeMagnitude: 10
-  reportCountDuration: 1
-  scoreAddDuration: 0.5
+  reportCountDuration: 0.25
+  scoreAddDuration: 0.25
   menuOptions:
   - backgroundImage: {fileID: 1740815813}
     optionText: {fileID: 156624688}
@@ -1060,7 +1060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.011764706}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.101960786}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2387,11 +2387,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a00b6fbbb0c9b848b5a1ade6ea585f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavesPerStage: 5
-  initialEnemyCount: 5
+  wavesPerStage: 2
+  initialEnemyCount: 1
   extraEnemiesMin: 1
-  extraEnemiesMax: 3
-  shopEveryWave: 5
+  extraEnemiesMax: 1
+  shopEveryWave: 2
   enemyEntityIDList:
   - enemy_spaceship
   spawnInterval: 2

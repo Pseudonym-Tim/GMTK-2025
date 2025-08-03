@@ -18,8 +18,11 @@ public class Entity : MonoBehaviour
 
     public void DestroyEntity(float destroyTime = 0)
     {
-        if(Application.isPlaying) { Destroy(EntityObject, destroyTime); }
-        else { DestroyImmediate(EntityObject); }
+        if(EntityObject != null)
+        {
+            if(Application.isPlaying) { Destroy(EntityObject, destroyTime); }
+            else { DestroyImmediate(EntityObject); }
+        }
     }
 
     public void ShowEntity(bool showEntity = true)

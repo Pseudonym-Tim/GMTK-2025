@@ -119,6 +119,8 @@ public class Player : Entity, IScreenWrappable
 
     public void OnDeath()
     {
+        EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
+        enemyWaveManager.StopWaveLogic();
         TriggerGameOver();
         ScreenwrapManager.Unregister(this);
         DestroyEntity();

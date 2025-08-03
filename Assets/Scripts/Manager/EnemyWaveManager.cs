@@ -28,6 +28,7 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
     private ShopManager shopManager; 
     private bool shopShownThisWave = false;
     private FadeUI fadeUI;
+    private bool isGameOver = false;
 
     private void Awake()
     {
@@ -37,10 +38,30 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         levelManager = FindFirstObjectByType<LevelManager>();
     }
 
+    public void StopWaveLogic()
+    {
+        isGameOver = true;
+        StopAllCoroutines();
+    }
+
     public void Setup()
     {
+        isGameOver = false;
         currentStage = 1;
         SetupStage();
+    }
+
+    private void StartNextWave()
+    {
+        if(isGameOver)
+        {
+            return;
+        }
+
+        currentWave++;
+        playerHUD.UpdateCurrentStage(currentStage);
+        playerHUD.UpdateCurrentWave(currentWave, wavesPerStage);
+        StartCoroutine(WaveCoroutine());
     }
 
     private void SetupStage()
@@ -82,16 +103,13 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         }
     }
 
-    private void StartNextWave()
-    {
-        currentWave++;
-        playerHUD.UpdateCurrentStage(currentStage);
-        playerHUD.UpdateCurrentWave(currentWave, wavesPerStage);
-        StartCoroutine(WaveCoroutine());
-    }
-
     private IEnumerator WaveCoroutine()
     {
+        if(isGameOver)
+        {
+            yield break;
+        }
+
         // If this is the first wave of the stage, show stage indication before anything else...
         if(currentWave == 1)
         {
@@ -115,6 +133,11 @@ public class EnemyWaveManager : Singleton<EnemyWaveManager>
         // Wait until all enemies are dead and gone before starting next wave...
         // TODO: Might want to check if all are not alive instead, so currentHealth <= 0 or something...
         yield return new WaitUntil(() => levelManager.GetEntities<Enemy>().Count == 0);
+
+        if(isGameOver)
+        {
+            yield break;
+        }
 
         // Open shop only after completing every specific wave...
         if(currentWave % shopEveryWave == 0)

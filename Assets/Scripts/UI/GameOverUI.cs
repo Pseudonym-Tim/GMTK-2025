@@ -49,6 +49,10 @@ public class GameOverUI : UIComponent
 
     private bool menuActive;
 
+    private string finalScoreTemplate;
+    private const string scorePlaceholder = "score";
+    private string highscoreBannerTemplate;
+
     private RectTransform headerRectTransform;
     private Vector3 headerInitialPosition;
     private int initialHighscore;
@@ -65,10 +69,22 @@ public class GameOverUI : UIComponent
 
     public override void SetupUI()
     {
+        if(statReports.Length != 5)
+        {
+            Debug.LogError($"GameOverUI expects 5 stat reports, but found {statReports.Length}");
+        }
+
         scoreManager = FindFirstObjectByType<ScoreManager>();
         headerRectTransform = destroyedHeaderImage.rectTransform;
         headerInitialPosition = headerRectTransform.localPosition;
+
+        finalScoreTemplate = TextHandler.GetText("currentScoreText", "gameover_ui");
+        highscoreBannerTemplate = TextHandler.GetText("highscoreText", "gameover_ui");
+
+        newHighscoreText.text = highscoreBannerTemplate;
         newHighscoreText.enabled = false;
+
+        finalScoreText.enabled = false;
 
         for(int i = 0; i < statReports.Length; i++)
         {
@@ -78,7 +94,6 @@ public class GameOverUI : UIComponent
         }
 
         CacheOriginalColors();
-
         selectedIndex = 0;
 
         for(int i = 0; i < menuOptions.Length; i++)
@@ -111,15 +126,18 @@ public class GameOverUI : UIComponent
         yield return ShakeHeader();
 
         int displayedFinalScore = scoreManager.CurrentScore;
-        finalScoreText.text = displayedFinalScore.ToString();
+        finalScoreText.enabled = true;
+        finalScoreText.text = finalScoreTemplate.Replace("%" + scorePlaceholder + "%", displayedFinalScore.ToString());
 
         for(int i = 0; i < statReports.Length; i++)
         {
             StatReport report = statReports[i];
             report.statText.enabled = true;
             yield return CountUpStat(report, reportCountDuration);
-            yield return CountUpwards(finalScoreText, displayedFinalScore, displayedFinalScore + report.value, scoreAddDuration);
+
+            int previous = displayedFinalScore;
             displayedFinalScore += report.value;
+            yield return CountUpWithTemplate(finalScoreText, finalScoreTemplate, scorePlaceholder, previous, displayedFinalScore, scoreAddDuration);
         }
 
         if(displayedFinalScore > initialHighscore)
@@ -143,6 +161,22 @@ public class GameOverUI : UIComponent
 
         HighlightOption(selectedIndex);
         menuActive = true;
+    }
+
+    private IEnumerator CountUpWithTemplate(TextMeshProUGUI textField, string template, string placeholder, int startValue, int endValue, float duration)
+    {
+        float elapsed = 0f;
+
+        while(elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            int current = Mathf.RoundToInt(Mathf.Lerp(startValue, endValue, t));
+            textField.text = template.Replace("%" + placeholder + "%", current.ToString());
+            yield return null;
+        }
+
+        textField.text = template.Replace("%" + placeholder + "%", endValue.ToString());
     }
 
     private void Update()
@@ -261,21 +295,27 @@ public class GameOverUI : UIComponent
 
     private IEnumerator CountUpStat(StatReport report, float duration)
     {
-        int startValue = 0;
-        int endValue = report.value;
-        float elapsed = 0f;
+        float elapsed = 0.0f;
+
+        // ensure we always enter the coroutine on the next frame
+        yield return null;
+
+        if(duration <= 0.0f)
+        {
+            report.statText.text = report.template.Replace("%" + report.placeholder + "%", report.value.ToString());
+            yield break;
+        }
 
         while(elapsed < duration)
         {
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
-            int currentValue = Mathf.RoundToInt(Mathf.Lerp(startValue, endValue, t));
-            string filledIn = report.template.Replace($"%{report.placeholder}%", currentValue.ToString());
-            report.statText.text = filledIn;
+            int currentValue = Mathf.RoundToInt(Mathf.Lerp(0, report.value, t));
+            report.statText.text = report.template.Replace("%" + report.placeholder + "%", currentValue.ToString());
             yield return null;
         }
 
-        report.statText.text = report.template.Replace($"%{report.placeholder}%", endValue.ToString());
+        report.statText.text = report.template.Replace("%" + report.placeholder + "%", report.value.ToString());
     }
 
     private IEnumerator CountUpwards(TextMeshProUGUI textField, int startValue, int endValue, float duration)

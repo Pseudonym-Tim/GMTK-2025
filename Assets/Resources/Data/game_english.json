@@ -20,6 +20,8 @@
         "recursionText": "<color=#ffffff><u>SUCCESSFUL RECURSIONS:</u>%recursion%</color>",
         "nearMissText": "<color=#ffffff><u>NEAR MISSES:</u>%nearMiss%</color>",
         "waveCompleteText": "<color=#ffffff><u>WAVES COMPLETED:</u>%waves%</color>",
-        "stageCompleteText": "<color=#ffffff><u>STAGES COMPLETED:</u>%stages%</color>"
+        "stageCompleteText": "<color=#ffffff><u>STAGES COMPLETED:</u>%stages%</color>",
+        "currentScoreText": "<color=#ffffff><u>TOTAL KILLS:</u>%score%</color>",
+        "highscoreText": "<color=#ffffff><u>NEW HIGHSCORE!</u></color>"
     }
 }
