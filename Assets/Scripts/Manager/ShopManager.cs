@@ -34,6 +34,7 @@ public class ShopManager : Singleton<ShopManager>
 
         if(playerEntity != null)
         {
+            PlayerInput.InputEnabled = false;
             playerEntity.SetInvulnerable(true);
             playerEntity.Teleport(new Vector2(0, 99999));
         }
@@ -88,11 +89,17 @@ public class ShopManager : Singleton<ShopManager>
 
     private IEnumerator CloseStoreAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);
+        WaitForSeconds fadeWait = new WaitForSeconds(delay);
+        yield return fadeWait;
+
         ShopUI shopUI = UIManager.GetUIComponent<ShopUI>();
         shopUI.Show(false);
         FadeUI fadeUI = UIManager.GetUIComponent<FadeUI>();
         fadeUI.FadeIn();
+
+        WaitForSeconds bufferWait = new WaitForSeconds(0.1f);
+        yield return bufferWait;
+
         EnemyWaveManager enemyWaveManager = FindFirstObjectByType<EnemyWaveManager>();
         enemyWaveManager.OnShopSelectionComplete();
 
@@ -101,6 +108,7 @@ public class ShopManager : Singleton<ShopManager>
 
         if(playerEntity != null)
         {
+            PlayerInput.InputEnabled = true;
             playerEntity.SetInvulnerable(false);
         }
     }
