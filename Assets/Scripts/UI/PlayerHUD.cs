@@ -75,12 +75,16 @@ public class PlayerHUD : UIComponent
         const int FLASHES = 6;
         float flashDuration = 0.5f;
 
+        SFXManager sfxManager = FindFirstObjectByType<SFXManager>();
+
         for(int i = 0; i < FLASHES; i++)
         {
             if(isShopAvailable)
             {
                 traderText.enabled = true;
             }
+
+            sfxManager.Play2DSound("wave_alarm");
 
             warningWaveText.enabled = true;
 

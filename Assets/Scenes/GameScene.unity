@@ -1120,7 +1120,7 @@ MonoBehaviour:
     trackID: star_carpet
     audioClip: {fileID: 8300000, guid: 4b16f84eef7584b4facd58d85192b95f, type: 3}
     musicAudioSource: {fileID: 0}
-    volume: 0.5
+    volume: 0.4
   masterMixerGroup: {fileID: 24300002, guid: 144e5b4c29c372f4996985d8c8e95943, type: 2}
 --- !u!1 &374569952
 GameObject:
@@ -3820,6 +3820,19 @@ MonoBehaviour:
     pitch: 1
     pitchRandomMin: 0.9
     pitchRandomMax: 1.25
+    useRandomPitch: 1
+    loopAudio: 0
+    spatial3DSoundInfo:
+      rolloffMode: 0
+      minAudibleDistance: 0
+      maxAudibleDistance: 0
+    soundAudioSource: {fileID: 0}
+  - soundName: wave_alarm
+    audioClip: {fileID: 8300000, guid: 4d77c2accf0d6914d8794531c8d443a7, type: 3}
+    volume: 1
+    pitch: 1.5
+    pitchRandomMin: 1.5
+    pitchRandomMax: 1.5
     useRandomPitch: 1
     loopAudio: 0
     spatial3DSoundInfo:

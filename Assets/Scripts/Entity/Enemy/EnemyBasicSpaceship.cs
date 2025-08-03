@@ -11,8 +11,6 @@ public class EnemyBasicSpaceship : Enemy
     [SerializeField] private float moveAcceleration = 5f;
     [SerializeField] private float moveDeceleration = 2.5f;
     [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float wanderChangeInterval = 2f;
-    [SerializeField] private float wanderRange = 5f;
 
     [Header("Shooting")]
     [SerializeField] private Transform shootPoint;
@@ -20,9 +18,11 @@ public class EnemyBasicSpaceship : Enemy
     [SerializeField] private float detectionRange = 10f;
     [SerializeField] private float predictionLeadTime = 1f;
 
-    private float wanderTimer = 0f;
-    private Vector2 wanderDirection = Vector2.zero;
-    private float shootTimer = 0f;
+    [Header("Avoidance")]
+    [SerializeField] private float avoidanceRange = 3f;
+    [SerializeField] private float avoidanceStrength = 0.5f;
+
+    private float shootTimer;
     private Rigidbody2D playerRigidbody2D;
 
     protected override void OnEntityAwake()
@@ -33,8 +33,6 @@ public class EnemyBasicSpaceship : Enemy
     public override void OnEntitySpawn()
     {
         base.OnEntitySpawn();
-        wanderTimer = wanderChangeInterval;
-        wanderDirection = Random.insideUnitCircle.normalized * wanderRange;
         shootTimer = Random.Range(0f, shootCooldown);
         playerRigidbody2D = playerEntity != null ? playerEntity.GetComponent<Rigidbody2D>() : null;
     }
@@ -46,43 +44,109 @@ public class EnemyBasicSpaceship : Enemy
             return;
         }
 
-        wanderTimer -= Time.fixedDeltaTime;
-
-        if(wanderTimer <= 0f)
-        {
-            wanderDirection = Random.insideUnitCircle.normalized * wanderRange;
-            wanderTimer = wanderChangeInterval;
-        }
-
         Vector2 currentPos = EntityPosition;
         Vector2 realTargetPos = playerEntity.CenterOfMass;
         Vector2 velocity = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
         Vector2 predictedPos = realTargetPos + velocity * predictionLeadTime;
+        Vector2 wrappedPredictedPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, predictedPos);
 
-        Vector2 desiredVelocity = wanderDirection * moveSpeed;
+        Vector2 rotationDir = (wrappedPredictedPos - currentPos).normalized;
+        UpdateRotation(rotationDir);
 
-        if(desiredVelocity.magnitude > 0.1f)
+        Vector2 wrappedTargetPos = ScreenwrapManager.GetBestWrappedPosition(currentPos, realTargetPos);
+        Vector2 movementDir = (wrappedTargetPos - currentPos).normalized;
+        UpdateMovement(movementDir);
+
+        UpdateShooting(currentPos, predictedPos, wrappedPredictedPos);
+    }
+
+    private void UpdateRotation(Vector2 direction)
+    {
+        float desiredAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        float currentAngle = enemyRigidbody2D.rotation;
+        float deltaAngle = Mathf.DeltaAngle(currentAngle, desiredAngle);
+        float turnAmount = Mathf.Sign(deltaAngle) * rotateSpeed * Time.fixedDeltaTime;
+
+        if(Mathf.Abs(turnAmount) > Mathf.Abs(deltaAngle))
         {
-            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVelocity, moveAcceleration * Time.fixedDeltaTime);
+            turnAmount = deltaAngle;
         }
-        else
+
+        enemyRigidbody2D.MoveRotation(currentAngle + turnAmount);
+    }
+
+    private void UpdateMovement(Vector2 direction)
+    {
+        Vector2 avoidanceDir = Vector2.zero;
+
+        List<Asteroid> asteroids = levelManager.GetEntities<Asteroid>(CenterOfMass, avoidanceRange);
+        asteroids.RemoveAll(delegate (Asteroid item) { return item == null; });
+
+        foreach(Asteroid asteroidEntity in asteroids)
         {
-            enemyRigidbody2D.linearVelocity = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, Vector2.zero, moveDeceleration * Time.fixedDeltaTime);
+            if(asteroidEntity == null)
+            {
+                continue;
+            }
+
+            Vector2 away = EntityPosition - asteroidEntity.CenterOfMass;
+            avoidanceDir += away.normalized / away.magnitude;
         }
 
-        float angle = Mathf.Atan2(desiredVelocity.y, desiredVelocity.x) * Mathf.Rad2Deg - 90f;
-        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
-        enemyRigidbody2D.MoveRotation(Mathf.LerpAngle(enemyRigidbody2D.rotation, angle, rotateSpeed * Time.fixedDeltaTime));
+        List<Enemy> otherEnemies = levelManager.GetEntities<Enemy>(CenterOfMass, avoidanceRange);
+        otherEnemies.RemoveAll(delegate (Enemy item) { return item == null || item == this; });
 
-        shootTimer -= Time.fixedDeltaTime;
-
-        if(shootTimer <= 0f && Vector2.Distance(currentPos, realTargetPos) <= detectionRange)
+        foreach(Enemy enemyEntity in otherEnemies)
         {
-            BulletProjectile bullet = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPoint.position, shootPoint.rotation);
-            bullet.Setup(BulletProjectile.BulletOwner.ENEMY, (predictedPos - currentPos).normalized);
-            shootTimer = shootCooldown;
-            sfxManager.Play2DSound("basic_shoot");
+            if(enemyEntity == null)
+            {
+                continue;
+            }
+
+            Vector2 awayEnemy = EntityPosition - enemyEntity.CenterOfMass;
+            avoidanceDir += awayEnemy.normalized / awayEnemy.magnitude;
         }
+
+        float playerDistance = Vector2.Distance(CenterOfMass, playerEntity.CenterOfMass);
+
+        if(playerDistance < avoidanceRange)
+        {
+            Vector2 awayFromPlayer = EntityPosition - playerEntity.CenterOfMass;
+
+            if(awayFromPlayer != Vector2.zero)
+            {
+                avoidanceDir = awayFromPlayer.normalized;
+            }
+        }
+        else if(avoidanceDir != Vector2.zero)
+        {
+            avoidanceDir.Normalize();
+            avoidanceDir = (direction + avoidanceDir * avoidanceStrength).normalized;
+        }
+
+        Vector2 desiredVel = avoidanceDir * moveSpeed;
+        Vector2 newVel = Vector2.MoveTowards(enemyRigidbody2D.linearVelocity, desiredVel, moveAcceleration * Time.fixedDeltaTime);
+        enemyRigidbody2D.linearVelocity = newVel;
+    }
+
+    private void UpdateShooting(Vector2 currentPos, Vector2 realPredictedPos, Vector2 wrappedPredictedPos)
+    {
+        shootTimer -= Time.deltaTime;
+
+        if(shootTimer > 0f || Vector2.Distance(CenterOfMass, playerEntity.CenterOfMass) > detectionRange)
+        {
+            return;
+        }
+
+        Vector2 aimDir = (wrappedPredictedPos - currentPos).normalized;
+        float aimAngle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg - 90f;
+        enemyRigidbody2D.MoveRotation(aimAngle);
+
+        BulletProjectile bullet = (BulletProjectile)levelManager.SpawnEntity("bullet_projectile", shootPoint.position, shootPoint.rotation);
+        bullet.Setup(BulletProjectile.BulletOwner.ENEMY, shootPoint.up);
+
+        sfxManager.Play2DSound("basic_shoot");
+        shootTimer = shootCooldown;
     }
 
     protected override void OnDrawEntityGizmos()
@@ -94,18 +158,18 @@ public class EnemyBasicSpaceship : Enemy
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(centerOfMass, detectionRange);
 
-        Gizmos.color = Color.purple;
-        Gizmos.DrawWireSphere(centerOfMass, wanderRange);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(centerOfMass, avoidanceRange);
 
         Gizmos.color = Color.green;
-        Vector3 forwardDir = EntityTransform.up;
-        Gizmos.DrawLine(centerOfMass, centerOfMass + forwardDir);
+        Gizmos.DrawLine(centerOfMass, centerOfMass + EntityTransform.up);
 
         if(playerEntity != null)
         {
             Vector2 realTarget = playerEntity.CenterOfMass;
             Vector2 linearVel = playerRigidbody2D != null ? playerRigidbody2D.linearVelocity : Vector2.zero;
             Vector3 predicted = new Vector3(realTarget.x + linearVel.x * predictionLeadTime, realTarget.y + linearVel.y * predictionLeadTime, 0f);
+
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(predicted, 0.1f);
             Gizmos.DrawLine(centerOfMass, predicted);
