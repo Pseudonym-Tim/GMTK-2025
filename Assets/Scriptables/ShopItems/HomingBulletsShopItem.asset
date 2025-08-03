@@ -17,6 +17,6 @@ MonoBehaviour:
   description: Your bullets slightly steer toward enemies!
   scaleWithPoints: 1
   costPercentage: 0.5
-  baseCost: 100
+  baseCost: 750
   minCost: 1
-  homingStrength: 0.1
+  homingStrength: 0.03
